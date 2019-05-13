@@ -1,0 +1,444 @@
+<h2>Hunt for Haken</h2>
+<br /><br />
+<div id="text"></div>
+<input id="input" />
+<script
+  type="text/javascript"
+  src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+></script>
+<script>
+  var oldman = 0;
+  var revents = 0;
+  var inn = 0;
+  var standCounter = 0;
+  var lastText = document.getElementById("Lasttext");
+  var text = document.getElementById("text");
+  var pClass = null;
+  var currentRoom = 0;
+  var currentChoice = 0;
+  var body = document.getElementsByTagName("body")[0];
+  var input = document.getElementById("input");
+  function clearInput() {
+    $("#input").val("");
+  }
+  text.innerHTML =
+    "Welcome! You are a " +
+    "Paladin of the Sun".fontcolor("gold") +
+    ", a noble order who fight for good across the known world. Do you come from the school of Fighting or the school of Diplomacy?";
+  function addText(s) {
+    var div = $('<div id="text2">' + s + "</div>");
+    $("#text").append(div);
+  }
+  function paladinText(s) {
+    var div = $(
+      '<div id="text2">' +
+        "You: ".fontcolor("Gold") +
+        s.fontcolor("gold") +
+        "</div>"
+    );
+    $("#text").append(div);
+  }
+  var state = "intro";
+  $("#input").keypress(function() {
+    if (event.which !== 13) {
+      return;
+    }
+
+    var inputTxt = $("#input").val();
+    var sinputTxt = inputTxt.toLowerCase();
+    clearInput();
+    switch (state) {
+      case "intro":
+        if (sinputTxt.includes("fight")) {
+          addText("You're a fighter!");
+          pClass = "fighter";
+        } else if (sinputTxt.includes("dip")) {
+          addText("You're a diplomat!");
+          pClass = "diplomat";
+        } else {
+          addText("try again!");
+        }
+        if (pClass !== null) {
+          state = "town1";
+          addText(
+            "Well, " +
+              pClass +
+              ", let me fill you in on what's happening. You are currently searching for a missing member of your order named Haken. The path has lead you to a town called Chaepstow. You have just ridden into town and you see an inn and a man leaning on a wall by the side of the road. Which do you approach?"
+          );
+        } else {
+          return;
+        }
+        console.log(pClass);
+        break;
+      case "town1":
+        if (sinputTxt.includes("man") || sinputTxt.includes("wall")) {
+          addText("You approach the man on the wall".fontcolor("red"));
+          state = "wallman";
+          addText(
+            "The man looks up as you approach, but says nothing. What do you want to ask him about? 1. The town	 2. Haken  3. Himself"
+          );
+        } else if (sinputTxt.includes("inn")) {
+          addText("To the inn! Press enter to continue.");
+          state = "inn1";
+        } else {
+          addText("try again!");
+        }
+        break;
+      case "wallman":
+        oldman = 1;
+        if (sinputTxt.includes("1") || sinputTxt.includes("town")) {
+          paladinText(
+            "Pardon me, sir, but can you tell me about the town I've just entered?"
+          );
+          addText(
+            "Man: Well, son, you're in the town of Chaepstow. I hope you don't plan on staying too long."
+          );
+          addText(
+            "The man seems pretty hostile. Perhaps you'll find someone friendlier at the inn. Do you want to go there now?"
+          );
+          state = "innchoice";
+        } else if (sinputTxt.includes("2") || sinputTxt.includes("haken")) {
+          console.log(pClass);
+
+          paladinText(
+            "Pardon me sir, I'm searching for a friend. Have any travellers come through recently, perhaps dressed like me?"
+          );
+          addText(
+            "Man: Sure, we've had travellers. Maybe they were like you, maybe not. I hope you don't stay long enough I hafta find out."
+          );
+        } else if (sinputTxt.includes("3") || sinputTxt.includes("him")) {
+          paladinText("Greetings, sir! How may I call you?");
+          addText("Man: You mayn't. Get on.");
+          if (pClass === "diplomat") {
+            state = "dip1";
+            addText("Do you want to sweet talk the man?");
+          } else if (pClass === "fighter") {
+            console.log(pClass);
+            addText(
+              "The man obviously doesn't want to talk to you. Perhaps you'll have better luck at the inn. Do you want to go there now?"
+            );
+            state = "innchoice";
+          }
+        } else {
+          console.log(sinputTxt);
+          addText("try again!");
+        }
+        break;
+      case "dip1":
+        if (sinputTxt.includes("y") || sinputTxt.includes("sure")) {
+          paladinText(
+            "Please, sir, I mean you no offense, nor harm. I'm merely trying to complete a mission for my order"
+          );
+          addText(
+            "Man: I couldn't care less about your order. The only order I care about is the order of my town. And I don't want it disturbed!"
+          );
+          addText(
+            "The man obviously doesn't want to talk to you. Perhaps you'll have better luck at the inn. Do you want to go there now?"
+          );
+          state = "innchoice";
+        } else if (sinputTxt.includes("n")) {
+          addText(
+            "Good choice. The man obviously doesn't want to talk to you. Perhaps you'll have better luck at the inn. Do you want to go there now?"
+          );
+          state = "innchoice";
+        } else {
+          addText("try again");
+        }
+        break;
+      case "innchoice":
+        if (standCounter <= 5) {
+          if (
+            sinputTxt.includes("inn") ||
+            sinputTxt.includes("ye") ||
+            sinputTxt.includes("sure")
+          ) {
+            addText("Good choice.");
+            state = "inn1";
+          } else if (
+            sinputTxt.includes("stay") ||
+            sinputTxt.includes("standing") ||
+            sinputTxt.includes("keep") ||
+            sinputTxt.includes("road") ||
+            sinputTxt.includes("n")
+          ) {
+            standCounter++;
+            addText(
+              "You keep standing in the road. Nothing much is happening.".fontcolor(
+                "red"
+              ) + " Do you want to go to the inn now?"
+            );
+            state = "standing";
+          } else {
+            addText("try again");
+          }
+        } else {
+          addText(
+            "Minutes turn to hours turn to days as you refuse to move. The weather changes, winter comes and goes, the only constant is you. Slowly you turn to rock, a blessing from your god, impressed with your stoicness. Eventually no one remembers that the statue used to be a real man."
+          );
+          state = "gameover";
+        }
+        break;
+      case "standing":
+        if (standCounter <= 5) {
+          if (
+            sinputTxt.includes("inn") ||
+            sinputTxt.includes("ye" || sinputTxt.includes("sure"))
+          ) {
+            addText("Good choice.");
+            state = "inn1";
+          } else if (
+            sinputTxt.includes("stay") ||
+            sinputTxt.includes("standing") ||
+            sinputTxt.includes("keep") ||
+            sinputTxt.includes("road") ||
+            sinputTxt.includes("n")
+          ) {
+            standCounter++;
+            addText(
+              "You keep standing in the road. Nothing much is happening.".fontcolor(
+                "red"
+              ) + " Do you want to go to the inn now?"
+            );
+            state = "innchoice";
+          }
+        } else {
+          addText(
+            "Minutes turn to hours turn to days as you refuse to move. The weather changes, winter comes and goes, the only constant is you. Slowly you turn to rock, a blessing from your god, impressed with your stoicness. Eventually no one remembers that the statue used to be a real man."
+          );
+          state = "gameover";
+        }
+        break;
+      case "gameover":
+        addText(
+          "I'm afraid that's the end of your journey, friend. You didn't choose quite right. See you 'round."
+        );
+        break;
+      case "inn1":
+        function barman() {
+          console.log("barman!");
+          if (oldman === 0) {
+            addText(
+              "Do you want to ask the Barman about 1. Haken, 2. Lodging, 3. The town, or 4. Himself?"
+            );
+            inn = 1;
+          } else if (oldman !== 0) {
+            addText(
+              "Do you want to ask the Barman about 1. Haken, 2. Lodging, 3. The town, 4. Himself, or 5. The old man?"
+            );
+            inn = 1;
+          }
+          if (sinputTxt.includes("1") || sinputTxt.includes("hak")) {
+            paladinText(
+              "Greetings, Barman! I'm searching for another member of my order, a man named Haken. Have any travellers dressed like me come through here? Anyone with this insignia?"
+            );
+            addText(
+              "You reach to remove the shield from your back, but the Barman jumps, so instead you point to the sun crest on your shirt"
+            );
+            addText(
+              "Barman: Ah, well, no I haven't seen any travellers like you, certainly no one with a name like Haken. There were some people come through recently but...".fontcolor(
+                "blue"
+              )
+            );
+            addText(
+              "The Barman pauses for a moment then shakes his head slightly"
+            );
+            addText(
+              "Barman: Nevermind them. You don't want anything to do with them.".fontcolor(
+                "blue"
+              )
+            );
+            addText("Do you want to ask about the travellers?");
+            state = "bartravellers";
+          } else if (
+            oldman !== 0 &&
+            (sinputTxt.includes("5") ||
+              sinputTxt.includes("man") ||
+              sinputTxt.includes("old"))
+          ) {
+            paladinText(
+              "I met a very unwelcoming old man in the road outside. Is he always like that?"
+            );
+            addText(
+              "Barman: Ah, that was probably Gary. Well, I won't say he usually goes out of his way for strangers, but with recent events especially I can see that he would've been unkind to you. Sorry bout him, everyone's a bit on edge.".fontcolor(
+                "blue"
+              )
+            );
+            revents = 1;
+          } else if (
+            sinputTxt.includes("2") ||
+            sinputTxt.includes("lodging") ||
+            sinputTxt.includes("room") ||
+            sinputTxt.includes("night")
+          ) {
+            paladinText("Do you have a room? I'm looking to stay the night");
+            addText(
+              "Barman: I'm not sure. I'll have to check with the wife".fontcolor(
+                "blue"
+              )
+            );
+            addText(
+              "He looks away from you as he says this and you get the sense that he isn't being entirely truthful."
+            );
+          } else if (sinputTxt.includes("3") || sinputTxt.includes("town")) {
+            paladinText(
+              "Greetings, barman, what can you tell me about this town?"
+            );
+            addText(
+              "Barman: Well, there's not really too much to tell. We're a quiet town, usually. Not very big. Course, hasn't been terribly quiet recently, but...".fontcolor(
+                "blue"
+              )
+            );
+            revents = 1;
+            addText("The barman trails off, chuckling nervously.");
+          } else if (
+            sinputTxt.includes("4") ||
+            sinputTxt.includes("him") ||
+            sinputTxt.includes("bar")
+          ) {
+            paladinText(
+              "It's nice to meet you, good sir. What should I call you? And what do you do in this town?"
+            );
+            addText(
+              "Barman: Oh just call me barman, my name doesn't matter. As you can probably tell I own this inn. I run the bar, and my wife cooks. We both deal with roomers.".fontcolor(
+                "blue"
+              )
+            );
+            addText("Anything else?");
+          } else if (
+            revents === 1 &&
+            (sinputTxt.includes("recent") || sinputTxt.includes("event"))
+          ) {
+            paladinText("Recent events? What happened");
+            addText(
+              "Barman: I'm sorry, excuse me a moment. I need to talk to my wife.".fontcolor(
+                "blue"
+              )
+            );
+            addText(
+              "The barman turns and almost runs into the kitchen What do you do?"
+            );
+            state = "thewife";
+          } else if (sinputTxt.includes("wife")) {
+            paladinText("Your wife? Tell me about her.");
+            addText("The Barman smiles");
+            addText(
+              "Barman: Ah yes, my wife. We've been married twenty years, and been runnin' this inn together for most of it. She's tough as nails she is, and terrible to get in an argument with, But I love her dearly. She'll be cookin' you breakfast if you stay the night, and you can buy dinner too if you like.".fontcolor(
+                "blue"
+              )
+            );
+          } else {
+            addText("Try again");
+          }
+        }
+        if (inn === 0) {
+          addText("A man at the bar looks up as you enter.".fontcolor("red"));
+          addText(
+            "Barman: Greetings, traveller. What can I do for you?".fontcolor(
+              "blue"
+            )
+          );
+          inn = 1;
+          barman();
+        } else if (inn !== 0) {
+          barman();
+        }
+        break;
+      case "thewife":
+        if (sinputTxt.includes("wait") || sinputTxt.includes("stay")) {
+          addText(
+            "You wait a minute. Then another. Then about ten more. You're beginning to wonder if he's coming back."
+          );
+        } else if (sinputTxt.includes("follow")) {
+          state = "thewife2";
+          addText(
+            "You follow the barman around behind the bar, starting to call after him when you're suddenly interrupted by four and a half feet of fury".fontcolor(
+              "red"
+            )
+          );
+          addText(
+            "The Wife: Who do you think you are, coming up behind my husband like that. Get back you hooligan!".fontcolor(
+              "blue"
+            )
+          );
+          addText(
+            "She turns to her husband who has somehow ended up behind her".fontcolor(
+              "red"
+            )
+          );
+          addText(
+            "The Wife: Is he another like the ones the other day? Do I need to get rid of him?".fontcolor(
+              "blue"
+            )
+          );
+        } else if (
+          sinputTxt.includes("look") ||
+          sinputTxt.includes("examine")
+        ) {
+          addText("Bar Description");
+        } else {
+          addText("try again!");
+        }
+        break;
+      case "thewife2":
+      case "bartravellers":
+        if (sinputTxt.includes("ye") || sinputTxt.includes("sure")) {
+          paladinText(
+            "You've had trouble with travellers recently? When were they through?"
+          );
+          addText("Barman: Now I didn't say that. I...".fontcolor("blue"));
+          addText(
+            "The Barman trails off, looking unsure. Do you want to keep pushing him?"
+          );
+          state = "dipcheck1";
+        } else if (sinputTxt.includes("n")) {
+          state = "inn1";
+          barman();
+        }
+        break;
+      case "dipcheck1":
+        if (
+          sinputTxt.includes("ye") ||
+          sinputTxt.includes("sure") ||
+          sinputTxt.includes("push")
+        ) {
+          if (pClass === "diplomat") {
+            paladinText(
+              "Good sir, I can see that you're concerned, but I assure you that I wish you no harm. I merely want to find the missing member of my order. Please tell me about the travellers who came through here."
+            );
+            addText(
+              "The Barman looks unsure for another moment, then you can see him make up his mind."
+            );
+            addText(
+              "Barman: Alright, you seem trustworthy. A few nights ago we had some travellers come through, a group of five men with a covered wagon. I think there was someone in the wagon as well, a prisoner, because a few times during the night it shook violently, and they brought food out to it in the morning. Gary's son challenged them about it when they were leaving, and they told him it was none of his business. Unfortunately, Mark's as hard headed as his father, so he tried to stop 'em leaving. The  guy pulled a dagger and slammed the pommel down on his head real hard. He's been in and out of consciousness since then. Plus they torched a barn on the way out of town, just to hurt us when we did nothing to them.".fontcolor(
+                "blue"
+              )
+            );
+            paladinText(
+              "I'm sorry, that's a terrible tragedy. I will pray for Mark tonight. As to the men who did this, I would like to pursue them, do you know where they went?"
+            );
+          } else if (pClass !== "diplomat") {
+            paladinText(
+              "Listen, if you've had trouble with marauders or anything like that, I could deal with them. I'm a paladin of the Sun, from the school of fighting, I can take anyone."
+            );
+            addText(
+              "The Barman shakes his head. This was obviously the wrong path."
+            );
+            addText(
+              "Barman: No. No more violence Actually, I'm sorry, the Inn is closed tonight. Please get out.".fontcolor(
+                "blue"
+              )
+            );
+            state = "closedinn";
+            addText("You exit the inn");
+          }
+        } else if (sinputTxt.includes("n")) {
+          state = "inn2";
+        } else {
+          addText("try again!");
+        }
+        break;
+      case "inn2":
+      case "closedinn":
+    }
+  });
+</script>
