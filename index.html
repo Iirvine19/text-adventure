@@ -329,7 +329,7 @@
               addText(
                 "The barman turns and almost runs into the kitchen".fontcolor(
                   "red"
-                ) + "What do you do?"
+                ) + " What do you do?"
               );
               state = "thewife";
             } else if (sinputTxt.includes("wife")) {
@@ -495,6 +495,8 @@
             "You reach for your sword to attack this woman, but she is much faster that you expected. Before your sword clears its sheath the knife in her hand has found its own: your throat. Your hands go to your neck and you topple to the ground, dead."
           );
           state = "gameover";
+        } else {
+          addText("try again");
         }
         break;
       //OWO WHAT'RE THESE TRAVELLERS?
@@ -509,6 +511,7 @@
           );
           state = "dipcheck1";
         } else if (sinputTxt.includes("n")) {
+          addText("Yeah, probably best not to push.");
           state = "inn1";
           barman();
         }
@@ -546,10 +549,10 @@
               "Barman: No. No more violence Actually, I'm sorry, the Inn is closed tonight. Please get out."
             );
             addText(
-              "Well, you got kicked out of the inn. Another night roughing it you suppose. Do you want to try to talk to the locals tonight, or wait for the morning?"
+              "Well, you got kicked out of the inn. Another night roughing it you suppose.  In the morning you'll try to find more information. Tonight you eat more hard bread and bunk down under the stars."
             );
+            addText("Press enter to continue.");
             state = "closedinn";
-            addText("You exit the inn");
           }
         } else if (sinputTxt.includes("n")) {
           state = "inn2";
@@ -584,6 +587,8 @@
 
       //YA GOT KICKED OUT or chose not to stay
       case "closedinn":
+        var image = $("<image> http://e-try.com/black.htm <image>");
+        body.append(image);
         //END OF INN BRANCHES
         break;
       case "dblchk":
