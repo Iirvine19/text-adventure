@@ -7,7 +7,7 @@
   src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
 ></script>
 <script>
-  var inventory = ['sword', 'shield', 'insignia'];
+  var inventory = ["sword", "shield", "insignia"];
   var oldman = 0;
   var revents = 0;
   var inn = 0;
@@ -410,30 +410,58 @@
           sinputTxt.includes("yu")
         ) {
           addText(
-            "You rise and walk over to the table.".fontcolor("red")" The shiny object on closer examination is a polished copper ring. It has no markings but is warm to the touch as if someone had just removed it."
+            "You rise and walk over to the table.".fontcolor("red") +
+              " The shiny object on closer examination is a polished copper ring. It has no markings but is warm to the touch as if someone had just removed it."
           ); //UWU it's magic. What does it do? Who knows I hope I figure it out.
           addText("Do you take it?");
-          state = "foundring"
+          state = "foundring";
         } else {
           addText("try again!");
         }
         break;
       case "foundring":
-      if (sinputTxt.includes("ye") || sinputTxt.includes("yu") || sinputTxt.includes("sure")) {
-        inventory.push("ring");
-        console.log(inventory);
-      addText("You take the ring and slip it into your pocket. Hopefully you'll remember it's there.".fontcolor("red"))
-      addText("You look up as you hear the barman come back into the main room. He has a woman with him who you assume is his wife.".fontcolor("red"))
-     } else if (sinputTxt.includes("n") {
-       addText("You leave the ring there. Hopefully it's rightful owner will return. Scavenging jewelry does not befit a paladin.".fontcolor("red"))
-       addText("You look up as you hear the barman come back into the main room. He has a woman with him who you assume is his wife.".fontcolor("red"))
-       addText("The woman beckons you over, and you walk up to the bar.".fontcolor("red"))
-       addText("The Wife: So, I hear you're looking for someone, and want to know about the travellers who came through the other day. ")
-     }else {
-
-       addText("try again!");
-     }
-     break;
+        if (
+          sinputTxt.includes("ye") ||
+          sinputTxt.includes("yu") ||
+          sinputTxt.includes("sure")
+        ) {
+          inventory.push("ring");
+          console.log(inventory);
+          addText(
+            "You take the ring and slip it into your pocket. Hopefully you'll remember it's there.".fontcolor(
+              "red"
+            )
+          );
+          addText(
+            "You look up as you hear the barman come back into the main room. He has a woman with him who you assume is his wife.".fontcolor(
+              "red"
+            )
+          );
+        } else if (sinputTxt.includes("n")) {
+          addText(
+            "You leave the ring there. Hopefully it's rightful owner will return. Scavenging jewelry does not befit a paladin.".fontcolor(
+              "red"
+            )
+          );
+          addText(
+            "You look up as you hear the barman come back into the main room. He has a woman with him who you assume is his wife.".fontcolor(
+              "red"
+            )
+          );
+          addText(
+            "The woman beckons you over, and you walk up to the bar.".fontcolor(
+              "red"
+            )
+          );
+          addText(
+            "The Wife: So, I hear you're looking for someone, and want to know about the travellers who came through the other day.".fontcolor(
+              "blue"
+            )
+          );
+        } else {
+          addText("try again!");
+        }
+        break;
       //UH OH SHE MAD. UNFINISHED
       case "thewife2":
         if (
