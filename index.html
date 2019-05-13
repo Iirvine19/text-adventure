@@ -7,6 +7,7 @@
   src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
 ></script>
 <script>
+  var inventory = ['sword', 'shield', 'insignia'];
   var oldman = 0;
   var revents = 0;
   var inn = 0;
@@ -48,6 +49,7 @@
     var sinputTxt = inputTxt.toLowerCase();
     clearInput();
     switch (state) {
+      //Introduction and Class selection
       case "intro":
         if (sinputTxt.includes("fight")) {
           addText("You're a fighter!");
@@ -63,13 +65,11 @@
           addText(
             "Well, " +
               pClass +
-              ", let me fill you in on what's happening. You are currently searching for a missing member of your order named Haken. The path has lead you to a town called Chaepstow. You have just ridden into town and you see an inn and a man leaning on a wall by the side of the road. Which do you approach?"
+              ", let me fill you in on what's happening. You are currently searching for a missing member of your order named Haken. The path has lead you to a town called Chaepstow. You have just ridden into town as the sun is setting and you see an inn and a man leaning on a wall by the side of the road. Which do you approach?"
           );
-        } else {
-          return;
         }
-        console.log(pClass);
         break;
+      //Arrival in town
       case "town1":
         if (sinputTxt.includes("man") || sinputTxt.includes("wall")) {
           addText("You approach the man on the wall".fontcolor("red"));
@@ -84,6 +84,7 @@
           addText("try again!");
         }
         break;
+      //Talking to Gary
       case "wallman":
         oldman = 1;
         if (sinputTxt.includes("1") || sinputTxt.includes("town")) {
@@ -124,6 +125,7 @@
           addText("try again!");
         }
         break;
+      //Talking to Gary More
       case "dip1":
         if (sinputTxt.includes("y") || sinputTxt.includes("sure")) {
           paladinText(
@@ -145,6 +147,7 @@
           addText("try again");
         }
         break;
+      //Going to the inn?
       case "innchoice":
         if (standCounter <= 5) {
           if (
@@ -178,6 +181,7 @@
           state = "gameover";
         }
         break;
+      //Didn't go to the inn
       case "standing":
         if (standCounter <= 5) {
           if (
@@ -215,6 +219,7 @@
         break;
 
       //START OF INN BRANCHES
+      //In the inn
       case "inn1":
         function barman() {
           console.log("barman!");
@@ -373,17 +378,91 @@
               "blue"
             )
           );
+          addText(
+            "Barman: No, no, thank you dear. He's just a little...overzealous. He was lookin for somewhere to stay the night on his search for a missing friend. I came back to ask you if that was alright.".fontcolor(
+              "blue"
+            )
+          );
+          addText(
+            "The Wife: Well, what do you have to say for yourself, coming back here all dressed up in armor like that, scaring a poor woman half to death."
+          );
+          addText("Do you defend yourself or apologize?");
         } else if (
           sinputTxt.includes("look") ||
           sinputTxt.includes("examine")
         ) {
-          addText("Bar Description");
+          addText(
+            "The main room looks pretty nice for a small town like this. Three small tables set with four chairs each, and a larger central table with 6 seats. The table in the back left seems to have something shiny on it, do you want to check it out?"
+          );
+          state = "findtable";
         } else {
           addText("try again!");
         }
         break;
+      //checking out the table
+      case "findtable":
+        if (sinputTxt.includes("n")) {
+          addText("Alright, well the barman's still not back. What do you do?");
+          state = "thewife";
+        } else if (
+          sinputTxt.includes("ye") ||
+          sinputTxt.includes("sure") ||
+          sinputTxt.includes("yu")
+        ) {
+          addText(
+            "You rise and walk over to the table.".fontcolor("red")" The shiny object on closer examination is a polished copper ring. It has no markings but is warm to the touch as if someone had just removed it."
+          ); //UWU it's magic. What does it do? Who knows I hope I figure it out.
+          addText("Do you take it?");
+          state = "foundring"
+        } else {
+          addText("try again!");
+        }
+        break;
+      case "foundring":
+      if (sinputTxt.includes("ye") || sinputTxt.includes("yu") || sinputTxt.includes("sure")) {
+        inventory.push("ring");
+        console.log(inventory);
+      addText("You take the ring and slip it into your pocket. Hopefully you'll remember it's there.".fontcolor("red"))
+      addText("You look up as you hear the barman come back into the main room. He has a woman with him who you assume is his wife.".fontcolor("red"))
+     } else if (sinputTxt.includes("n") {
+       addText("You leave the ring there. Hopefully it's rightful owner will return. Scavenging jewelry does not befit a paladin.".fontcolor("red"))
+       addText("You look up as you hear the barman come back into the main room. He has a woman with him who you assume is his wife.".fontcolor("red"))
+       addText("The woman beckons you over, and you walk up to the bar.".fontcolor("red"))
+       addText("The Wife: So, I hear you're looking for someone, and want to know about the travellers who came through the other day. ")
+     }else {
+
+       addText("try again!");
+     }
+     break;
       //UH OH SHE MAD. UNFINISHED
       case "thewife2":
+        if (
+          sinputTxt.includes("apologize") ||
+          sinputTxt.includes("sorry") ||
+          sinputTxt.includes("regret")
+        ) {
+          paladinText("OnO so sorry");
+          addText("Okie doe he can stay");
+        } else if (sinputTxt.includes("defend")) {
+          paladinText(
+            "How else would I dress? I am a Paladin of the Sun, on the hunt for a missing member of my order. And he became very suspicious when I asked him about recent events and travellers."
+          );
+          addText(
+            "The Wife: Right, get out. Don't need more troublemakers in this town, the last bunch were more than enough."
+          );
+          state = "closedinn";
+        } else if (
+          sinputTxt.includes("attack") ||
+          sinputTxt.includes("fight") ||
+          sinputTxt.includes("stab") ||
+          sinputTxt.includes("kill")
+        ) {
+          addText(
+            "You reach for your sword to attack this woman, but she is much faster that you expected. Before your sword clears its sheath the knife in her hand has found its own: your throat. Your hands go to your neck and you topple to the ground, dead."
+          );
+          state = "gameover";
+        }
+        break;
       //OWO WHAT'RE THESE TRAVELLERS?
       case "bartravellers":
         if (sinputTxt.includes("ye") || sinputTxt.includes("sure")) {
@@ -447,9 +526,11 @@
         }
         break;
       case "inn2":
+        break;
       //YA GOT KICKED OUT
       case "closedinn":
-      //END OF INN BRANCHES
+        //END OF INN BRANCHES
+        break;
     }
   });
 </script>
