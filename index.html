@@ -7,6 +7,26 @@
   src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
 ></script>
 <script>
+  var affirmative = [
+    "yup",
+    "yep",
+    "yes",
+    "delighted",
+    "all right",
+    "alright",
+    "very well",
+    "of course",
+    "by all means",
+    "sure",
+    "certainly",
+    "absolutely",
+    "indeed",
+    "affirmative",
+    "affirmative",
+    "agreed",
+    "roger"
+  ];
+  var negative = ["nix", "no", "nada", "negative", "naw", "nay"];
   var inventory = ["sword", "shield", "insignia"];
   var bman = 0;
   var oldman = 0;
@@ -20,6 +40,7 @@
   var currentChoice = 0;
   var body = document.getElementsByTagName("body")[0];
   var input = document.getElementById("input");
+
   function clearInput() {
     $("#input").val("");
   }
@@ -53,6 +74,13 @@
     var inputTxt = $("#input").val();
     var sinputTxt = inputTxt.toLowerCase();
     clearInput();
+    function YN() {
+      if (affirmative.includes(sinputTxt)) {
+        return true;
+      } else if (negative.includes(sinputTxt)) {
+        return false;
+      }
+    }
     switch (state) {
       //Introduction and Class selection
       case "intro":
@@ -115,6 +143,31 @@
           addDlg(
             "Man: Sure, we've had travellers. Maybe they were like you, maybe not. I hope you don't stay long enough I hafta find out."
           );
+          addText(
+            "The man obviously doesn't want to talk to you. Perhaps you'll have better luck at the inn. Do you want to go there now?"
+          );
+          state = "innchoice";
+        } else if (
+          sinputTxt.includes("attack") ||
+          sinputTxt.includes("fight") ||
+          sinputTxt.includes("stab") ||
+          sinputTxt.includes("kill")
+        ) {
+          addText(
+            "The old man dies easily, a single blow to his throat. As he collapses to the ground you hear him say".fontcolor(
+              "red"
+            ) + " 'So, you are like the others.'".fontcolor("blue")
+          );
+          addText(
+            "Suddenly you hear a door slam open. There's a man holding a knife looking at you from his doorway.".fontcolor(
+              "red"
+            )
+          );
+          addDlg("Help, Help! He killed Gary! The stranger killed Gary!");
+          addText(
+            "It's a small village and the man has a big voice. A crowd gathers very quicly, many of them holding knives or axes. Do you fight them or do you run?"
+          );
+          state = "mob";
         } else if (sinputTxt.includes("3") || sinputTxt.includes("him")) {
           paladinText("Greetings, sir! How may I call you?");
           addDlg("Man: You mayn't. Get on.");
@@ -135,7 +188,7 @@
         break;
       //Talking to Gary More
       case "dip1":
-        if (sinputTxt.includes("y") || sinputTxt.includes("sure")) {
+        if (YN() === true) {
           paladinText(
             "Please, sir, I mean you no offense, nor harm. I'm merely trying to complete a mission for my order"
           );
@@ -146,11 +199,32 @@
             "The man obviously doesn't want to talk to you. Perhaps you'll have better luck at the inn. Do you want to go there now?"
           );
           state = "innchoice";
-        } else if (sinputTxt.includes("n")) {
+        } else if (YN() === false) {
           addText(
             "Good choice. The man obviously doesn't want to talk to you. Perhaps you'll have better luck at the inn. Do you want to go there now?"
           );
           state = "innchoice";
+        } else if (
+          sinputTxt.includes("attack") ||
+          sinputTxt.includes("fight") ||
+          sinputTxt.includes("stab") ||
+          sinputTxt.includes("kill")
+        ) {
+          addText(
+            "The old man dies easily, a single blow to his throat. As he collapses to the ground you hear him say".fontcolor(
+              "red"
+            ) + " 'So, you are like the others.'".fontcolor("blue")
+          );
+          addText(
+            "Suddenly you hear a door slam open. There's a man holding a knife looking at you from his doorway.".fontcolor(
+              "red"
+            )
+          );
+          addDlg("Help, Help! He killed Gary! The stranger killed Gary!");
+          addText(
+            "It's a small village and the man has a big voice. A crowd gathers very quicly, many of them holding knives or axes. Do you fight them or do you run?"
+          );
+          state = "mob";
         } else {
           addText("try again");
         }
@@ -158,11 +232,7 @@
       //Going to the inn?
       case "innchoice":
         if (standCounter <= 5) {
-          if (
-            sinputTxt.includes("inn") ||
-            sinputTxt.includes("ye") ||
-            sinputTxt.includes("sure")
-          ) {
+          if (sinputTxt.includes("inn") || YN() === true) {
             addText("Good choice.");
             state = "inn1";
           } else if (
@@ -170,15 +240,36 @@
             sinputTxt.includes("standing") ||
             sinputTxt.includes("keep") ||
             sinputTxt.includes("road") ||
-            sinputTxt.includes("n")
+            YN() === false
           ) {
             standCounter++;
             addText(
-              "You keep standing in the road. Nothing much is happening.".fontcolor(
+              "You keep standing in the road. Nothing much is happening. The old man won't acknowledge you".fontcolor(
                 "red"
               ) + " Do you want to go to the inn now?"
             );
             state = "standing";
+          } else if (
+            sinputTxt.includes("attack") ||
+            sinputTxt.includes("fight") ||
+            sinputTxt.includes("stab") ||
+            sinputTxt.includes("kill")
+          ) {
+            addText(
+              "The old man dies easily, a single blow to his throat. As he collapses to the ground you hear him say".fontcolor(
+                "red"
+              ) + " 'So, you are like the others.'".fontcolor("blue")
+            );
+            addText(
+              "Suddenly you hear a door slam open. There's a man holding a knife looking at you from his doorway.".fontcolor(
+                "red"
+              )
+            );
+            addDlg("Help, Help! He killed Gary! The stranger killed Gary!");
+            addText(
+              "It's a small village and the man has a big voice. A crowd gathers very quicly, many of them holding knives or axes. Do you fight them or do you run?"
+            );
+            state = "mob";
           } else {
             addText("try again");
           }
@@ -192,10 +283,7 @@
       //Didn't go to the inn
       case "standing":
         if (standCounter <= 5) {
-          if (
-            sinputTxt.includes("inn") ||
-            sinputTxt.includes("ye" || sinputTxt.includes("sure"))
-          ) {
+          if (sinputTxt.includes("inn") || YN() === true) {
             addText("Good choice.");
             state = "inn1";
           } else if (
@@ -203,19 +291,67 @@
             sinputTxt.includes("standing") ||
             sinputTxt.includes("keep") ||
             sinputTxt.includes("road") ||
-            sinputTxt.includes("n")
+            YN() === false
           ) {
             standCounter++;
             addText(
-              "You keep standing in the road. Nothing much is happening.".fontcolor(
+              "You keep standing in the road. Nothing much is happening. The old man won't acknowledge you".fontcolor(
                 "red"
               ) + " Do you want to go to the inn now?"
             );
             state = "innchoice";
+          } else if (
+            sinputTxt.includes("attack") ||
+            sinputTxt.includes("fight") ||
+            sinputTxt.includes("stab") ||
+            sinputTxt.includes("kill")
+          ) {
+            addText(
+              "The old man dies easily, a single blow to his throat. As he collapses to the ground you hear him say".fontcolor(
+                "red"
+              ) + " 'So, you are like the others.'".fontcolor("blue")
+            );
+            addText(
+              "Suddenly you hear a door slam open. There's a man holding a knife looking at you from his doorway."
+            ).fontcolor("red");
+            addDlg("Help, Help! He killed Gary! The stranger killed Gary!");
+            addText(
+              "It's a small village and the man has a big voice. A crowd gathers very quicly, many of them holding knives or axes. Do you fight them or do you run?"
+            );
+            state = "mob";
+          } else {
+            addText("try again");
           }
         } else {
           addText(
             "Minutes turn to hours turn to days as you refuse to move. The weather changes, winter comes and goes, the only constant is you. Slowly you turn to rock, a blessing from your god, impressed with your stoicness. Eventually no one remembers that the statue used to be a real man."
+          );
+          state = "gameover";
+        }
+        break;
+      case "mob":
+        if (sinputTxt.includes("fight") || sinputTxt.includes("kill")) {
+          addText(
+            "Foolishly you try to fight them. You charge on your horse, laying about you with your blade. One, two, three fall, but it's not enough. You are dragged from your horse, and beaten to death in the street.".fontcolor(
+              "red"
+            )
+          );
+          addText("A fitting end for a paladin turned murderer of elders.");
+          state = "gameover";
+        } else if (
+          sinputTxt.includes("run") ||
+          sinputTxt.includes("flee") ||
+          sinputTxt.includes("book it")
+        ) {
+          addText(
+            "You turn your horse to try to flee but an flung axe strikes you in the back of the head. Not expecting combat your feet were not in the stirrups and you are knocked from your horse. The crowd is on you in an instant, and you are beaten to death in the street.".fontcolor(
+              "red"
+            ) +
+              " As the final blow is brought down on your head you hear" +
+              " 'This one's for Mark!'".fontcolor("blue")
+          );
+          addText(
+            "'Who's Mark?'you wonder, but only for as long as it takes the axe to fall."
           );
           state = "gameover";
         }
@@ -327,7 +463,7 @@
                 "Barman: I'm sorry, excuse me a moment. I need to talk to my wife."
               );
               addText(
-                "The barman turns and almost runs into the kitchen".fontcolor(
+                "The barman turns and almost runs into the kitchen.".fontcolor(
                   "red"
                 ) + " What do you do?"
               );
@@ -370,7 +506,11 @@
           addText(
             "You wait a minute. Then another. Then about ten more. You're beginning to wonder if he's coming back."
           );
-        } else if (sinputTxt.includes("follow")) {
+        } else if (
+          sinputTxt.includes("follow") ||
+          sinputTxt.includes("go") ||
+          sinputTxt.includes("after")
+        ) {
           state = "thewife2";
           addText(
             "You follow the barman around behind the bar, starting to call after him when you're suddenly interrupted by four and a half feet of fury".fontcolor(
@@ -392,7 +532,7 @@
             "Barman: No, no, thank you dear. He's just a little...overzealous. He was lookin for somewhere to stay the night on his search for a missing friend. I came back to ask you if that was alright."
           );
           addDlg(
-            "The Wife: Well, what do you have to say for yourself, coming back here all dressed up in armor like that, scaring a poor woman half to death"
+            "The Wife: Well, what do you have to say for yourself, coming back here all dressed up in armor like that, scaring a poor woman half to death."
           );
           addText("Do you defend yourself or apologize?");
         } else if (
@@ -409,14 +549,10 @@
         break;
       //checking out the table
       case "findtable":
-        if (sinputTxt.includes("n")) {
+        if (YN() === false) {
           addText("Alright, well the barman's still not back. What do you do?");
           state = "thewife";
-        } else if (
-          sinputTxt.includes("ye") ||
-          sinputTxt.includes("sure") ||
-          sinputTxt.includes("yu")
-        ) {
+        } else if (YN() === true) {
           addText(
             "You rise and walk over to the table.".fontcolor("red") +
               " The shiny object on closer examination is a polished copper ring. It has no markings but is warm to the touch as if someone had just removed it."
@@ -429,9 +565,10 @@
         break;
       case "foundring":
         if (
-          sinputTxt.includes("ye") ||
-          sinputTxt.includes("yu") ||
-          sinputTxt.includes("sure")
+          sinputTxt.includes("pick") ||
+          sinputTxt.includes("pocket") ||
+          sinputTxt.includes("take") ||
+          YN() === true
         ) {
           inventory.push("ring");
           console.log(inventory);
@@ -445,7 +582,7 @@
               "red"
             )
           );
-        } else if (sinputTxt.includes("n")) {
+        } else if (YN() === false) {
           addText(
             "You leave the ring there. Hopefully it's rightful owner will return. Scavenging jewelry does not befit a paladin.".fontcolor(
               "red"
@@ -464,9 +601,16 @@
           addDlg(
             "The Wife: So, I hear you're looking for someone, and want to know about the travellers who came through the other day."
           );
+          paladinText("Yes, can you tell me anything about that?");
+          addDlg(
+            "The Wife: I tell you what. If you stay for dinner with us, and clean the kitchen up afterwards, then I'll tell you what I know. Sound like a deal?"
+          );
+          state = "workforinfo";
         } else {
           addText("try again!");
         }
+        break;
+      case "workforinfo":
         break;
       //UH OH SHE MAD. UNFINISHED
       case "thewife2":
@@ -475,8 +619,18 @@
           sinputTxt.includes("sorry") ||
           sinputTxt.includes("regret")
         ) {
-          paladinText("OnO so sorry");
-          addDlg("Okie doe he can stay");
+          paladinText(
+            "Please excuse me ma'am, I'm just trying to complete my mission. I'm terribly sorry if I frightened you."
+          );
+          addDlg(
+            "The Wife: don't be absurd, it would take a lot more than that to scare me."
+          );
+          addText("The Wife turns to her husband").fontcolor("red");
+          addDlg("The Wife: Is he staying for dinner?");
+          addDlg("The Barman: I don't know.");
+          addText("He turns to you").fontcolor("red");
+          addDlg("The Barman: Are you?");
+          state = "dinner?";
         } else if (sinputTxt.includes("defend")) {
           paladinText(
             "How else would I dress? I am a Paladin of the Sun, on the hunt for a missing member of my order. And he became very suspicious when I asked him about recent events and travellers."
@@ -494,6 +648,9 @@
           addText(
             "You reach for your sword to attack this woman, but she is much faster that you expected. Before your sword clears its sheath the knife in her hand has found its own: your throat. Your hands go to your neck and you topple to the ground, dead."
           );
+          addText(
+            "Really, that's what you get for such unpaladin-like behavior."
+          );
           state = "gameover";
         } else {
           addText("try again");
@@ -501,7 +658,7 @@
         break;
       //OWO WHAT'RE THESE TRAVELLERS?
       case "bartravellers":
-        if (sinputTxt.includes("ye") || sinputTxt.includes("sure")) {
+        if (YN() === true) {
           paladinText(
             "You've had trouble with travellers recently? When were they through?"
           );
@@ -510,19 +667,17 @@
             "The Barman trails off, looking unsure. Do you want to keep pushing him?"
           );
           state = "dipcheck1";
-        } else if (sinputTxt.includes("n")) {
+        } else if (YN() === false) {
           addText("Yeah, probably best not to push.");
           state = "inn1";
           barman();
+        } else {
+          addText("try again!");
         }
         break;
       //DIPLOMACY CHECK. DO YOU TALK GOOD?
       case "dipcheck1":
-        if (
-          sinputTxt.includes("ye") ||
-          sinputTxt.includes("sure") ||
-          sinputTxt.includes("push")
-        ) {
+        if (YN() === true || sinputTxt.includes("push")) {
           if (pClass === "diplomat") {
             paladinText(
               "Good sir, I can see that you're concerned, but I assure you that I wish you no harm. I merely want to find the missing member of my order. Please tell me about the travellers who came through here."
@@ -536,6 +691,13 @@
             paladinText(
               "I'm sorry, that's a terrible tragedy. I will pray for Mark tonight. As to the men who did this, I would like to pursue them, do you know where they went?"
             );
+            addDlg(
+              "Barman: They left town to the North. Everard was out hunting the night after they left and he said that they some of them holed up in a cave a few miles Northwest, and the others continued up the North Road. Stay the night, and I'll have him come over tomorrow morning and you can talk."
+            );
+            addText(
+              "Do you stay the night to talk to Everard or begin pursuit right now?"
+            );
+            state = "staychoice";
           } else if (pClass !== "diplomat") {
             paladinText(
               "Listen, if you've had trouble with marauders or anything like that, I could deal with them. I'm a paladin of the Sun, from the school of fighting, I can take anyone."
@@ -554,20 +716,65 @@
             addText("Press enter to continue.");
             state = "closedinn";
           }
-        } else if (sinputTxt.includes("n")) {
+        } else if (YN() === false) {
+          paladinText(
+            "Very well, I see you don't want to talk about it. I'll respect that but please know that it would help a lot."
+          );
+          addDlg(
+            "Barman: Well...I'll tell you what. You get dinner and a room here, and I'll see if my wife likes you. If she does, I'll tell you everything I know. Thank you for not pushing."
+          );
           state = "inn2";
+          addText("Will you stay for dinner?");
         } else {
           addText("try again!");
         }
         break;
+      case "staychoice":
+        if (
+          sinputTxt.includes("stay") ||
+          sinputTxt.includes("eve") ||
+          sinputTxt.includes("sleep")
+        ) {
+        } else if (
+          sinputTxt.includes("purs") ||
+          sinputTxt.includes("follow") ||
+          sinputTxt.includes("chase") ||
+          sinputTxt.includes("tonight")
+        ) {
+          addText(
+            "You decide that you cannot allow your quarry to continue to get ahead of you."
+          );
+          paladinText(
+            "Thank you kindly for your hospitality and your help, but I must get after these fiends as soon as I can."
+          );
+          addDlg(
+            "Barman: Very well. I wish you luck. Will you start with the cave to the Northwest, or pursue the others on the North road?"
+          );
+        } else {
+          addText("try again!");
+        }
+        state = "leaving town";
       case "inn2":
+        if (YN === true) {
+          addText(
+            "Dinner turns out to be a delicious chicken stew, and some good, thick bread."
+          );
+          paladinText(
+            "My compliments, m'lady. This meal rivals those I've eaten at a Baron's table, and I couldn't ask for more in terms of hospitality."
+          );
+          addText("The Barman's wife blushes");
+        } else if (YN === false) {
+          addText(":(");
+        } else {
+          addText("try again");
+        }
         break;
       //Gonna get dinner?
       case "dinner?":
         if (
-          sinputTxt.includes("ye") ||
-          sinputTxt.includes("yu") ||
-          sinputTxt.includes("sure")
+          YN() === true ||
+          sinputTxt.includes("stay") ||
+          sinputTxt.includes("dinner")
         ) {
           paladinText(
             "I would love to stay for dinner. What's your wife making?"
@@ -575,7 +782,43 @@
           addDlg(
             "Barman: Actually you've chosen a great night to come. One of our hens wasn't laying anymore, so we've got chicken stew tonight."
           );
-        } else if (sinputTxt.includes("n")) {
+          state = "dinner.";
+          addText(
+            "You choose to stay for dinner, and pay for dinner and a room. You head upstairs and get your things settled into your room. You don't plan on staying long, but it looks like rain so you want your things inside. Your horse is safely stabled, and all is well."
+          );
+          setTimeout(
+            addText("After about an hour there's a knock on your door"),
+            300
+          );
+          addDlg("Barman: Dinner's ready, come join us!");
+          addText(
+            "You rise, open the door, and follow the Barman down to the dinner table.".fontcolor(
+              "red"
+            ) +
+              " The stew smells delicious and there is good, thick bread to go with it. Dinner is mostly silent, until the Barman's wife speaks up."
+          );
+          addDlg(
+            "The Wife: So, you want to know about the people who came through here the other day? Well, you seem trustworthy. I'm Edna, and that's Harold."
+          );
+          addText("Harold nods to you, and you smile back.").fontcolor("red");
+          setTimeout(
+            paladinText(
+              "It's nice to learn the names of such pleasant hosts. Thank you for the delicious meal."
+            ),
+            300
+          );
+          paladinText(
+            "It's nice to learn the names of such pleasant hosts. Thank you for the delicious meal."
+          );
+          addText("Edna smiles at the compliment").fontcolor("red");
+          addDlg(
+            "Edna: Well, about the people who came through the other day. It was a group of five rough men, travelling with a covered wagon. Harold thinks they had someone they were keeping in it. "
+          );
+          addText("Harold nods, adding: ").fontcolor("red") +
+            "They brought food out to the wagon, and during the night it got up to some awful shaking until one of them went out and stopped it.".fontcolor(
+              "Blue"
+            );
+        } else if (YN() === false) {
           addText(
             "Suit yourself. You're missing out though. Would it change your mind if I reminded you you're travelling on the order's coin?"
           );
@@ -584,25 +827,86 @@
           addText("try again!");
         }
         break;
+      case "dinner.":
 
       //YA GOT KICKED OUT or chose not to stay
       case "closedinn":
-        var image = $("<image> http://e-try.com/black.htm <image>");
-        body.append(image);
+        addText(
+          "With the inn no longer an option you spend the night beneath the stars, a little ways outside town. After a bland dinner of hard bread and cheese. In the morning you can try again, maybe you'll have better luck with someone else."
+        );
+        var x = Math.floor(Math.random() * 10 + 1);
+        if (x > 8) {
+          state = "surprisebear";
+          addText(
+            "You awaken in the dead of night to your horse whinnying loudly and nervously. Your fire has burnt out and with the clouds the night is black as pitch.".fontcolor(
+              "red"
+            ) + " Do you ignore it or light a torch?"
+          );
+        } else {
+          addText("In the morning you rise and pack your bags. ");
+          //  state =
+        }
         //END OF INN BRANCHES
         break;
-      case "dblchk":
+      case "surprisebear":
+        if (sinputTxt.includes("sleep") || sinputTxt.includes("ignore")) {
+          addText(
+            "Your horse's whinnies grow louder and more scared but you're too tired to deal with it. You pull a blanket over your head and go back to sleep"
+          ).fontcolor("red");
+        } else if (sinputTxt.includes("torch") || sinputTxt.includes("light")) {
+          addText(
+            "You scrabble around for your tinder box and, after a few tries, your torch flairs to life.".fontcolor(
+              "red"
+            )
+          );
+          addText(
+            "In the light of the torch you can see a large bear digging into your food supplies. Do you fight it, try to scare it off, or just let it be? It is quite a large bear."
+          );
+          state = "bearfight";
+        } else {
+          addText("try again!");
+        }
+        break;
+      case "bearfight":
         if (
-          sinputTxt.includes("ye") ||
-          sinputTxt.includes("yu") ||
-          sinputTxt.includes("sure")
+          sinputTxt.includes("fight") ||
+          sinputTxt.includes("kill") ||
+          sinputTxt.includes("attack")
         ) {
+          addText(
+            "You grab your sword and yell at the bear to get its attention. Afterall stabbing it in the ass isn't likely to do anything but make it angry."
+          ).fontcolor("red");
+          // LUNCH BREAK BUT IF YOU'RE SCHOOL OF FIGHTING YOU SUCCEED IF NOT YOU FAIL
+        } else if (sinputTxt.includes("yell") || sinputTxt.includes("scare")) {
+          addText(
+            "You yell at the bear, waving your torch towards it. It looks up, surprised, and decides your old cheese isn't worth it. The bear flees.".fontcolor(
+              "red"
+            )
+          );
+          addText(
+            "Congratulations, you scared off a bear. Next time remember to hang your food up."
+          );
+          state = "";
+        } else if (
+          sinputTxt.includes("ignore") ||
+          sinputTxt.includes("let") ||
+          sinputTxt.includes("sleep")
+        ) {
+        } else {
+          addText("try again");
+        }
+        break;
+      case "dblchk":
+        if (YN() === true) {
           addText("Alright, if you're sure.");
-        } else if (sinputTxt.includes("n")) {
+          state = "closedinn";
+        } else if (YN() === false) {
           addText("Right choice.");
         } else {
           addText("try again!");
         }
+        break;
+      case "leavingtown":
         break;
     }
   });
