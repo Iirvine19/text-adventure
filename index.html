@@ -360,8 +360,21 @@
         addText(
           "I'm afraid that's the end of your journey, friend. You didn't choose quite right. See you 'round."
         );
+        addText("Play again?");
+        state = "restart";
         break;
-
+      case "restart":
+        if (YN() === true) {
+          text.innerHTML =
+            "Welcome! You are a " +
+            "Paladin of the Sun".fontcolor("gold") +
+            ", a noble order who fight for good across the known world. Do you come from the school of Fighting or the school of Diplomacy?";
+          state = "intro";
+        } else if (YN() === false) {
+          addText("Right. Have a good day then.");
+        } else {
+          addText("try again");
+        }
       //START OF INN BRANCHES
       //In the inn
       case "inn1":
@@ -843,7 +856,15 @@
             ) + " Do you ignore it or light a torch?"
           );
         } else {
-          addText("In the morning you rise and pack your bags. ");
+          addText(
+            "In the morning you rise and pack your bags. You walk towards town, and on the way you run into a man setting a rabbit snare, who jumps when he notices you."
+          ).fontcolor("red");
+          addDlg(
+            "Hunter: Oh, hello there. I was just checking what that was, and it's, umm. It's a rabbit snare you know, you should get rid of it, a man of the law like you."
+          );
+          addText(
+            "As the Hunter babbles you remember that the baron of this region declared all the land his land, and madde hunting on it illegal. "
+          );
           //  state =
         }
         //END OF INN BRANCHES
@@ -877,6 +898,30 @@
             "You grab your sword and yell at the bear to get its attention. Afterall stabbing it in the ass isn't likely to do anything but make it angry."
           ).fontcolor("red");
           // LUNCH BREAK BUT IF YOU'RE SCHOOL OF FIGHTING YOU SUCCEED IF NOT YOU FAIL
+          if (pClass === "fighter") {
+            addText(
+              "You lunge at the bear as it turns towards you, and you're lucky enough to catch it under the chin. The bear lies dead, and you give thanks to your God over its body.".fontcolor(
+                "red"
+              )
+            );
+            addText(
+              "Perhaps you should offer the Bear to the town, as a peace offering, and hope they'll tell you about the people who came through."
+            );
+          } else {
+            addText(
+              "You swing your sword at the bear's throat, but miss, glancing off the skull. The bear roars in pain and anger, and rears up on its back legs.".fontcolor(
+                "red"
+              )
+            );
+            var x = Math.floor(Math.random() * 10 + 1);
+            if (x > 7) {
+            } else if (x <= 7) {
+              addText(
+                "The bear brings its massive weight down on your unprotected chest, knocking you to the ground and crushing your lungs. It then goes for the throat and the last thing you see is a massve pair of bear jaws clamping themselves to your defenseless neck. You are dead."
+              );
+              state = "gameover";
+            }
+          }
         } else if (sinputTxt.includes("yell") || sinputTxt.includes("scare")) {
           addText(
             "You yell at the bear, waving your torch towards it. It looks up, surprised, and decides your old cheese isn't worth it. The bear flees.".fontcolor(
@@ -886,12 +931,15 @@
           addText(
             "Congratulations, you scared off a bear. Next time remember to hang your food up."
           );
-          state = "";
+          //state = "";
         } else if (
           sinputTxt.includes("ignore") ||
           sinputTxt.includes("let") ||
           sinputTxt.includes("sleep")
         ) {
+          addText(
+            "Your horse's whinnies grow louder and more scared but you're too tired to deal with it. The bear doesn't want a fight, and neither do you. You pull a blanket over your head and go back to sleep"
+          ).fontcolor("red");
         } else {
           addText("try again");
         }
