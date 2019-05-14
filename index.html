@@ -33,7 +33,6 @@
   var revents = 0;
   var inn = 0;
   var standCounter = 0;
-  var lastText = document.getElementById("Lasttext");
   var text = document.getElementById("text");
   var pClass = null;
   var currentRoom = 0;
@@ -329,6 +328,7 @@
           state = "gameover";
         }
         break;
+      //Killed Gary. Idiot.
       case "mob":
         if (sinputTxt.includes("fight") || sinputTxt.includes("kill")) {
           addText(
@@ -356,6 +356,7 @@
           state = "gameover";
         }
         break;
+      //Game is over
       case "gameover":
         addText(
           "I'm afraid that's the end of your journey, friend. You didn't choose quite right. See you 'round."
@@ -363,6 +364,7 @@
         addText("Play again?");
         state = "restart";
         break;
+      //Restart option
       case "restart":
         if (YN() === true) {
           text.innerHTML =
@@ -576,6 +578,7 @@
           addText("try again!");
         }
         break;
+      //OwO magic ring. Do you take it?
       case "foundring":
         if (
           sinputTxt.includes("pick") ||
@@ -623,6 +626,7 @@
           addText("try again!");
         }
         break;
+      //You'll get your info, if you work for the wife.
       case "workforinfo":
         break;
       //UH OH SHE MAD. UNFINISHED
@@ -831,6 +835,10 @@
             "They brought food out to the wagon, and during the night it got up to some awful shaking until one of them went out and stopped it.".fontcolor(
               "Blue"
             );
+          paladinText("A prisoner? Did anyone see him?");
+          addDlg(
+            "Edna: No. Gary's son, Mark tried to stop them on their way out of town, but "
+          );
         } else if (YN() === false) {
           addText(
             "Suit yourself. You're missing out though. Would it change your mind if I reminded you you're travelling on the order's coin?"
@@ -840,6 +848,7 @@
           addText("try again!");
         }
         break;
+      //
       case "dinner.":
 
       //YA GOT KICKED OUT or chose not to stay
@@ -915,6 +924,14 @@
             );
             var x = Math.floor(Math.random() * 10 + 1);
             if (x > 7) {
+              addText(
+                "You take advantage of the bear's new state, and twist your blade around and up, jamming it through the bottom of the bear's jaw, killing it. The bear lies dead, and you give thanks to your God over its body.".fontcolor(
+                  "red"
+                )
+              );
+              addText(
+                "Perhaps you should offer the Bear to the town, as a peace offering, and hope they'll tell you about the people who came through."
+              );
             } else if (x <= 7) {
               addText(
                 "The bear brings its massive weight down on your unprotected chest, knocking you to the ground and crushing your lungs. It then goes for the throat and the last thing you see is a massve pair of bear jaws clamping themselves to your defenseless neck. You are dead."
@@ -950,6 +967,7 @@
           state = "closedinn";
         } else if (YN() === false) {
           addText("Right choice.");
+          addText("Say yes please to go to dinner");
         } else {
           addText("try again!");
         }
