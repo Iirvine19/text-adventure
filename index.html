@@ -26,6 +26,7 @@
     "agreed",
     "roger"
   ];
+  var night = 0;
   var negative = ["nix", "no", "nada", "negative", "naw", "nay"];
   var inventory = ["sword", "shield", "insignia"];
   var bman = 0;
@@ -776,6 +777,7 @@
           addText(
             "You decide that you cannot allow your quarry to continue to get ahead of you."
           );
+          night = 1;
           paladinText(
             "Thank you kindly for your hospitality and your help, but I must get after these fiends as soon as I can."
           );
@@ -873,6 +875,27 @@
         break;
 
       case "meetEverard":
+        addText("You rise with the sun the next morning, and after packing your bags you walk downstairs to discover Harold in conversation with another man. They raise their heads as you enter.")
+        addDlg("Harold: Oh, good morning. This is my friend Everard I told you about, the one who saw some of the people you're looking for hanging around by the Goblin Cave.")
+        addText("Everard rises and shakes your hand.".textcolor("red"))
+        addDlg("Everard: Harold says you're looking for the men who done Mark right? Well I seen some of 'em the other day. I was out huntin' for")
+        addText("He stops and eyes you suspiciously".fontcolor("red"))
+        addDlg("Wait, you're a paladin? You're not a lawman though right?")
+        paladinText("Well, not for your king. I uphold the laws of-")
+        addText("Everard cuts you off".fontcolor("red"))
+        addDlg("I don't care, just wanted to make sure. Anyway, so I was up there huntin' deer, and I saw two guys I recognized from when they came through town jus sittin outside. I don't know what they was doin, or where the goblins was, but they were sittin' there, clear as day the same folks who'd hit Mark cross the head, talkin' bout how they were gonna leave soon to catch upta the others. You gonna kill 'em?")
+        if (pClass === "fighter"){
+          paladinText("Probably. They most likely kidnapped a member of my order, and they've been assaulting random townsfolk. I didn't come from the school of fighting to stand for something like that.")
+          addDlg("Everard: Well, more power to ya if you do. Mark was a good friend and I don't know that he'll recover.")
+        }else{
+          paladinText("We'll see. I'll try to talk to them first, but given what I've been told it seems likely that they will become violent.")
+          addDlg("Everard: Well I'd hope you kill 'em. Mark didn't deserve what he got.")
+        }
+        addDlg("Harold: Anyway, that's all you know Everard?")
+        addDlg("Everard: They also talked some nonsense bout a magic ring. Apparently it makes your footsteps quiet. Seems like a bunch o' crap to me, but one of 'em was pretty upset he'd lost it.")
+        paladinText("Thank you, Everard for telling me what you know. I will begin my pursuit right away.")
+        addDlg("Harold: Well, you going to go North after the wagon, or to the Cave?")
+        state = "leavingtown"
           //MEETING EVERARD
         break;
       case "dinner.":
@@ -1007,7 +1030,11 @@
         paladinText("Thank you so much for your hospitality and your helpfulness. I will try to repay it at some point.")
         addDlg("Harold: Repay me by dealing with the men that hurt Mark.")
         paladinText("I shall deal justice. Farewell.")
+        if (night === 1){
         addText("You leave that night and hurry on the North road. Sure enough after several miles you come across a huge old tree, hollowed by lighting. Perhaps it would be best to sleep for a few hours here before you continue to the cave?")
+      }else if (night === 0){
+
+      }
       }else{
         addText("try again")
       }
