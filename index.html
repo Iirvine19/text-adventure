@@ -468,7 +468,6 @@
               addDlg(
                 "Barman: Oh just call me barman, my name doesn't matter. As you can probably tell I own this inn. I run the bar, and my wife cooks. We both deal with roomers."
               );
-              addText("Anything else?");
             } else if (
               revents === 1 &&
               (sinputTxt.includes("recent") || sinputTxt.includes("event"))
@@ -485,7 +484,7 @@
               state = "thewife";
             } else if (sinputTxt.includes("wife")) {
               paladinText("Your wife? Tell me about her.");
-              addText("The Barman smiles").fontcolor("red");
+              addText("The Barman smiles".fontcolor("red"));
               addDlg(
                 "Barman: Ah yes, my wife. We've been married twenty years, and been runnin' this inn together for most of it. She's tough as nails she is, and terrible to get in an argument with, But I love her dearly. She'll be cookin' you breakfast if you stay the night, and you can buy dinner too if you like."
               );
@@ -628,6 +627,17 @@
         break;
       //You'll get your info, if you work for the wife.
       case "workforinfo":
+        if (YN()===true|| sinputTxt.includes("stay")|| sinputTxt.includes("dinner")){
+          addDlg("The wife: Great. I'm Edna. Go on upstairs and I'll give you a shout when dinner's ready.")
+          case = "inn2"
+        }else if (YN()===false){
+          case = "closedinn"
+          paladinText("Work in the kitchen, to learn something that might be useless? I don't think so.")
+          addDlg("The Wife: I hope you don't plan on staying the night, then. The inn is closed.")
+          addText("Harold escorts you to the door.".fontcolor("red"))
+        }else {
+          addText("try again")
+        }
         break;
       //UH OH SHE MAD. UNFINISHED
       case "thewife2":
@@ -752,6 +762,11 @@
           sinputTxt.includes("eve") ||
           sinputTxt.includes("sleep")
         ) {
+          paladinText("I will stay the night, and meet your friend in the morning. Thank you again for your hospitality.")
+          addDlg("Harold: Our pleasure.")
+          addText("You follow Edna back into the kitchen and help her clean up after dinner. You then go up to your room, and go to sleep.")
+          addText("Press enter for the next day to start.")
+          state = "meetEverard"
         } else if (
           sinputTxt.includes("purs") ||
           sinputTxt.includes("follow") ||
@@ -766,11 +781,12 @@
           );
           addDlg(
             "Barman: Very well. I wish you luck. Will you start with the cave to the Northwest, or pursue the others on the North road?"
+              state = "leavingtown";
           );
         } else {
           addText("try again!");
         }
-        state = "leaving town";
+
       case "inn2":
         if (YN === true) {
           addText(
@@ -781,7 +797,8 @@
           );
           addText("The Barman's wife blushes");
         } else if (YN === false) {
-          addText(":(");
+          addText("You choose not to spend the night. God only knows why given you were promised the info you wanted.");
+          state = "closedinn";
         } else {
           addText("try again");
         }
@@ -817,28 +834,34 @@
           addDlg(
             "The Wife: So, you want to know about the people who came through here the other day? Well, you seem trustworthy. I'm Edna, and that's Harold."
           );
-          addText("Harold nods to you, and you smile back.").fontcolor("red");
+          addText("Harold nods to you, and you smile back.".fontcolor("red"));
           setTimeout(
             paladinText(
               "It's nice to learn the names of such pleasant hosts. Thank you for the delicious meal."
             ),
             300
           );
-          paladinText(
-            "It's nice to learn the names of such pleasant hosts. Thank you for the delicious meal."
-          );
-          addText("Edna smiles at the compliment").fontcolor("red");
+          addText("Edna smiles at the compliment".fontcolor("red"));
           addDlg(
             "Edna: Well, about the people who came through the other day. It was a group of five rough men, travelling with a covered wagon. Harold thinks they had someone they were keeping in it. "
           );
-          addText("Harold nods, adding: ").fontcolor("red") +
-            "They brought food out to the wagon, and during the night it got up to some awful shaking until one of them went out and stopped it.".fontcolor(
-              "Blue"
-            );
+          addText(
+            "Harold nods, adding: ".fontcolor("red") +
+              "They brought food out to the wagon, and during the night it got up to some awful shaking until one of them went out and stopped it.".fontcolor(
+                "Blue"
+              )
+          );
           paladinText("A prisoner? Did anyone see him?");
           addDlg(
-            "Edna: No. Gary's son, Mark tried to stop them on their way out of town, but "
+            "Edna: No. Gary's son, Mark tried to stop them on their way out of town, but one of those terrible men just hit him in the head with the pommel of his dagger. Poor Mark, he fell to the ground and he's hardly been up since. And those evil men just rode away north, laughing."
           );
+          addDlg(
+            "Harold: My friend Everard says he's seen 'em up by the goblin cave, some of 'em. But the others went on North. You can go after them in the morning, but please stay the night. I'll bring Everard over to talk in the morning."
+          );
+          addText(
+            "Do you stay the night to talk to Everard or begin pursuit right now?"
+          );
+          state = "staychoice";
         } else if (YN() === false) {
           addText(
             "Suit yourself. You're missing out though. Would it change your mind if I reminded you you're travelling on the order's coin?"
@@ -848,13 +871,16 @@
           addText("try again!");
         }
         break;
-      //
-      case "dinner.":
 
+      case "meetEverard":
+          //MEETING EVERARD
+        break;
+      case "dinner.":
+        break;
       //YA GOT KICKED OUT or chose not to stay
       case "closedinn":
         addText(
-          "With the inn no longer an option you spend the night beneath the stars, a little ways outside town. After a bland dinner of hard bread and cheese. In the morning you can try again, maybe you'll have better luck with someone else."
+          "With the inn no longer an option you spend the night beneath the stars, a little ways outside town. You prepare your campsite and after a bland dinner of hard bread and cheese you go to sleep. In the morning you can try again, maybe you'll have better luck with someone else"
         );
         var x = Math.floor(Math.random() * 10 + 1);
         if (x > 8) {
@@ -973,6 +999,18 @@
         }
         break;
       case "leavingtown":
+      if (/*North Pursuit*/){
+        paladinText("I must follow the up the North road. I feel that their prisoner may be the man I seek.")
+      }else if (/*Goblin Cave*/){
+        paladinText("I'm going to start with the ones in the cave. They can tell me what's going on, and if their prisoner is the man I seek. At the very least, I can do some justice for Gary's son.")
+        addDlg("Harold: Alright, but be careful. That cave is known for its goblin presence, on top of the bad people we know are in there. It's about 7 miles northwest. If you follow the North road until you reach the lighting struck tree, then turn right you should reach it easily.")
+        paladinText("Thank you so much for your hospitality and your helpfulness. I will try to repay it at some point.")
+        addDlg("Harold: Repay me by dealing with the men that hurt Mark.")
+        paladinText("I shall deal justice. Farewell.")
+        addText("You leave that night and hurry on the North road. Sure enough after several miles you come across a huge old tree, hollowed by lighting. Perhaps it would be best to sleep for a few hours here before you continue to the cave?")
+      }else{
+        addText("try again")
+      }
         break;
     }
   });
