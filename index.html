@@ -25,10 +25,9 @@
     "affirmative",
     "agreed",
     "roger",
-    "ok",
-    "cool"
-
+    "ok", "cool", "okie"
   ];
+  var torch === 0;
   var cavestealth = 0;
   var work = 0;
   var everard = 0;
@@ -47,6 +46,7 @@
   var currentChoice = 0;
   var body = document.getElementsByTagName("body")[0];
   var input = document.getElementById("input");
+  var laststate = "";
 
   function clearInput() {
     $("#input").val("");
@@ -98,7 +98,7 @@
           addText("You're a diplomat!");
           pClass = "diplomat";
         } else {
-          addText("Try again.!");
+          addText("Try again!");
         }
         if (pClass !== null) {
           state = "town1";
@@ -124,7 +124,7 @@
           addText("To the inn! Press enter to continue.");
           state = "inn1";
         } else {
-          addText("Try again.!");
+          addText("Try again!");
         }
         break;
       //Talking to Gary
@@ -190,7 +190,7 @@
           }
         } else {
           console.log(sinputTxt);
-          addText("Try again.!");
+          addText("Try again!");
         }
         break;
       //Talking to Gary More
@@ -233,7 +233,7 @@
           );
           state = "mob";
         } else {
-          addText("Try again.");
+          addText("Try again!");
         }
         break;
       //Going to the inn?
@@ -278,7 +278,7 @@
             );
             state = "mob";
           } else {
-            addText("Try again.");
+            addText("Try again!");
           }
         } else {
           addText(
@@ -327,7 +327,7 @@
             );
             state = "mob";
           } else {
-            addText("Try again.");
+            addText("Try again!");
           }
         } else {
           addText(
@@ -383,7 +383,7 @@
         } else if (YN() === false) {
           addText("Right. Have a good day then.");
         } else {
-          addText("Try again.");
+          addText("Try again!");
         }
       //START OF INN BRANCHES
       //In the inn
@@ -512,7 +512,7 @@
               state = "dinner?"
             }
              else {
-              addText("Try again.");
+              addText("Try again!");
             }
           }
         }
@@ -573,7 +573,7 @@
           );
           state = "findtable";
         } else {
-          addText("Try again.!");
+          addText("Try again!");
         }
         break;
       //checking out the table
@@ -589,7 +589,7 @@
           addText("Do you take it?");
           state = "foundring";
         } else {
-          addText("Try again.!");
+          addText("Try again!");
         }
         break;
       //OwO magic ring. Do you take it?
@@ -650,7 +650,7 @@
           );
           state = "workforinfo";
         } else {
-          addText("Try again.!");
+          addText("Try again!");
         }
         break;
       //You'll get your info, if you work for the wife.
@@ -664,7 +664,7 @@
           addDlg("The Wife: I hope you don't plan on staying the night, then. The inn is closed.")
           addText("Harold escorts you to the door.".fontcolor("red"))
         }else {
-          addText("Try again.")
+          addText("Try again!")
         }
         break;
       //UH OH SHE MAD. UNFINISHED
@@ -708,7 +708,7 @@
           );
           state = "gameover";
         } else {
-          addText("Try again.");
+          addText("Try again!");
         }
         break;
       //OWO WHAT'RE THESE TRAVELLERS?
@@ -727,7 +727,7 @@
           state = "inn1";
           barman();
         } else {
-          addText("Try again.!");
+          addText("Try again!");
         }
         break;
       //DIPLOMACY CHECK. DO YOU TALK GOOD?
@@ -781,7 +781,7 @@
           state = "inn2";
           addText("Will you stay for dinner?");
         } else {
-          addText("Try again.!");
+          addText("Try again!");
         }
         break;
         case "staychoicenodinner":
@@ -856,7 +856,7 @@
               state = "leavingtown";
             }
         } else {
-          addText("Try again.!");
+          addText("Try again!");
         }
         break;
 
@@ -896,7 +896,7 @@
           addText("You choose not to spend the night. God only knows why given you were promised the info you wanted.");
           state = "closedinn";
         } else {
-          addText("Try again.");
+          addText("Try again!");
         }
         break;
       //Gonna get dinner?
@@ -964,7 +964,7 @@
           );
           state = "dblchk";
         } else {
-          addText("Try again.!");
+          addText("Try again!");
         }
         break;
 
@@ -998,7 +998,7 @@
       //YA GOT KICKED OUT or chose not to stay
       case "closedinn":
         addText(
-          "With the inn no longer an option you spend the night beneath the stars, a little ways outside town. You prepare your campsite and after a bland dinner of hard bread and cheese you go to sleep. In the morning you can Try again., maybe you'll have better luck with someone else"
+          "With the inn no longer an option you spend the night beneath the stars, a little ways outside town. You prepare your campsite and after a bland dinner of hard bread and cheese you go to sleep. In the morning you can Try again!, maybe you'll have better luck with someone else"
         );
         var x = Math.floor(Math.random() * 10 + 1);
         if (x > 8) {
@@ -1038,7 +1038,7 @@
           );
           state = "bearfight";
         } else {
-          addText("Try again.!");
+          addText("Try again!");
         }
         break;
       case "bearfight":
@@ -1102,7 +1102,7 @@
             "Your horse's whinnies grow louder and more scared but you're too tired to deal with it. The bear doesn't want a fight, and neither do you. You pull a blanket over your head and go back to sleep"
           ).fontcolor("red");
         } else {
-          addText("Try again.");
+          addText("Try again!");
         }
         break;
       case "dblchk":
@@ -1114,7 +1114,7 @@
           addText("Say yes please to go to dinner")
           state = "dinner?";
         } else {
-          addText("Try again.!");
+          addText("Try again!");
         }
         break;
       case "leavingtown":
@@ -1145,7 +1145,7 @@
         }
       }
       }else{
-        addText("Try again.")
+        addText("Try again!")
       }
         break;
         //entering the cave
@@ -1154,10 +1154,10 @@
         addText("You search around the outside of the cave but you don't find much. The dirt softened by the rain shows footprints by the cave entrance, so obviously the men you're seeking are still here.")
         addText("Are you ready to enter the cave?")
       }else if (sinputTxt.includes("plunge")||sinputTxt.includes("in")||sinputTxt.includes("enter")||sinputTxt.includes("go")||(YN()===true)){
-        addText("You enter the cave cautiously, looking around. There is a little light, enough to see maybe 30 feet back. The cave is fairly large and looks unoccupied, but you know that to be false. There are two natural tunnels at the back of the cave, one going left and one going right. WHhat do you do?")
+        addText("You enter the cave cautiously, looking around. There is a little light, enough to see maybe 30 feet back. The cave is fairly large and looks unoccupied, but you know that to be false. There are two natural tunnels at the back of the cave, one going left and one going right. What do you do?")
         state = "maincave"
       }else{
-        addText("Try again.")
+        addText("Try again!")
       }
       break;
       //Look around or follow a tunnel?
@@ -1179,7 +1179,7 @@
           state = "torch"
           tunnel = "right"
         }else{
-          addText("Try again.")
+          addText("Try again!")
         }
         break;
         case "takeknife":
@@ -1188,12 +1188,14 @@
           if (sinputTxt.includes("light")||sinputTxt.includes("torch")){
             addText("That was a bright choice.")
             addText("You light your torch, and suddenly the tunnel is brought into sharp relief.")
+            torch = 1;
             if (inventory.indexOf("ring") !== -1 && everard == 1){
               addText("As you're thinking about stealth and the tunnel before you, you remember what Everard said about the ring. Perhaps it's the same ring you found.")
               addText("Do you put it on?")
               state = "ringchoice"
             }else{
               addText("UwU end of the line. Gotta write more.")
+              torch = 0;
             }
           }
         break;
@@ -1201,12 +1203,45 @@
         case "ringchoice":
           if (YN()===true){
             addText("You slip the ring onto your finger".fontcolor("red"))
-            addText("Nothing feels different, but when you start to walk down the tunnel you realise that Everard was absolutely right. You footsteps are now silent, even in your heavy boots.")
+            addText("Nothing feels different, but when you start to walk down the tunnel you realise that Everard was absolutely right. Your footsteps are now silent, even in your heavy boots.")
             cavestealth = 1;
           }else if (YN()===false) {
             addText("Probably a good choice. Best not to mess with magic you don't know.")
-            addText("You continue down the tunnel, walking as quietly as you can.")
+            addText("You continue down the tunnel, walking as quietly as you can.".fontcolor("red"))
+          }else {addText("Try again!")}
+          //Left Tunnel Stealthy
+          if (tunnel === "left" && cavestealth === 1){
+          addText("You stalk silently down the tunnel for several minutes, following a winding downward curve.".fontcolor("red"));
+          addText("As you walk along the paty you suddenly realise there's light coming into the other end of the tunnel.".fontcolor("red"))
+          addText(" Do you extinguish your torch?")
+          laststate = state;
+          state = "torchout"
           }
+          //Left tunnel non-Stealthy
+          else if(tunnel === "left" && cavestealth === 0){
+
+          }
+          //Right tunnel Stealthy
+          else if(tunnel === "right" && cavestealth === 1){
+
+          }
+          //Right tunnwl non-Stealthy
+          else if(tunnel === "right" && cavestealth === 0){
+
+          }
+        break;
+      case "torchout":
+        if (YN()===true){
+          torch = 0;
+          if (laststate = "ringchoice"){
+            state = "UwU What State?"
+              addText("You extinguish your torch before proceeding carefully around the corner.")
+          }
+
+
+        }else if(YN()===false){
+          torch = 1;
+        }
         break;
     }
   });
