@@ -24,8 +24,15 @@
     "affirmative",
     "affirmative",
     "agreed",
-    "roger"
+    "roger",
+    "ok",
+    "cool"
+
   ];
+  var cavestealth = 0;
+  var work = 0;
+  var everard = 0;
+  var tunnel = "";
   var night = 0;
   var negative = ["nix", "no", "nada", "negative", "naw", "nay"];
   var inventory = ["sword", "shield", "insignia"];
@@ -91,7 +98,7 @@
           addText("You're a diplomat!");
           pClass = "diplomat";
         } else {
-          addText("try again!");
+          addText("Try again.!");
         }
         if (pClass !== null) {
           state = "town1";
@@ -117,7 +124,7 @@
           addText("To the inn! Press enter to continue.");
           state = "inn1";
         } else {
-          addText("try again!");
+          addText("Try again.!");
         }
         break;
       //Talking to Gary
@@ -183,7 +190,7 @@
           }
         } else {
           console.log(sinputTxt);
-          addText("try again!");
+          addText("Try again.!");
         }
         break;
       //Talking to Gary More
@@ -226,7 +233,7 @@
           );
           state = "mob";
         } else {
-          addText("try again");
+          addText("Try again.");
         }
         break;
       //Going to the inn?
@@ -271,7 +278,7 @@
             );
             state = "mob";
           } else {
-            addText("try again");
+            addText("Try again.");
           }
         } else {
           addText(
@@ -320,7 +327,7 @@
             );
             state = "mob";
           } else {
-            addText("try again");
+            addText("Try again.");
           }
         } else {
           addText(
@@ -376,7 +383,7 @@
         } else if (YN() === false) {
           addText("Right. Have a good day then.");
         } else {
-          addText("try again");
+          addText("Try again.");
         }
       //START OF INN BRANCHES
       //In the inn
@@ -480,8 +487,9 @@
               addText(
                 "The barman turns and almost runs into the kitchen.".fontcolor(
                   "red"
-                ) + " What do you do?"
+                )
               );
+              addText("What do you do?")
               state = "thewife";
             } else if (sinputTxt.includes("wife")) {
               paladinText("Your wife? Tell me about her.");
@@ -497,8 +505,14 @@
               addText(
                 "You decide to let the travellers thing go, it obviously makes him nervous. Maybe ask about his wife?"
               );
-            } else {
-              addText("Try again");
+            }else if (sinputTxt.includes("breakfast")){
+              addDlg("Barman: Yeah, there's breakfast in the morning. We keep chickens, so it'll be eggs and bread when you get up. Breakfast is free if you stay the night.")
+            }else if (sinputTxt.includes("dinner")){
+              addDlg("Barman: Yeah, we've got dinner here. You plan on staying for it?")
+              state = "dinner?"
+            }
+             else {
+              addText("Try again.");
             }
           }
         }
@@ -559,7 +573,7 @@
           );
           state = "findtable";
         } else {
-          addText("try again!");
+          addText("Try again.!");
         }
         break;
       //checking out the table
@@ -575,7 +589,7 @@
           addText("Do you take it?");
           state = "foundring";
         } else {
-          addText("try again!");
+          addText("Try again.!");
         }
         break;
       //OwO magic ring. Do you take it?
@@ -598,6 +612,19 @@
               "red"
             )
           );
+          addText(
+            "The woman beckons you over, and you walk up to the bar.".fontcolor(
+              "red"
+            )
+          );
+          addDlg(
+            "The Wife: So, I hear you're looking for someone, and want to know about the travellers who came through the other day."
+          );
+          paladinText("Yes, can you tell me anything about that?");
+          addDlg(
+            "The Wife: I tell you what. If you stay for dinner with us, and clean the kitchen up afterwards, then I'll tell you what I know. Sound like a deal?"
+          );
+          state = "workforinfo";
         } else if (YN() === false) {
           addText(
             "You leave the ring there. Hopefully it's rightful owner will return. Scavenging jewelry does not befit a paladin.".fontcolor(
@@ -623,21 +650,21 @@
           );
           state = "workforinfo";
         } else {
-          addText("try again!");
+          addText("Try again.!");
         }
         break;
       //You'll get your info, if you work for the wife.
       case "workforinfo":
         if (YN()===true|| sinputTxt.includes("stay")|| sinputTxt.includes("dinner")){
           addDlg("The wife: Great. I'm Edna. Go on upstairs and I'll give you a shout when dinner's ready.")
-          case = "inn2"
+          state = "inn2";
         }else if (YN()===false){
-          case = "closedinn"
+          state = "closedinn"
           paladinText("Work in the kitchen, to learn something that might be useless? I don't think so.")
           addDlg("The Wife: I hope you don't plan on staying the night, then. The inn is closed.")
           addText("Harold escorts you to the door.".fontcolor("red"))
         }else {
-          addText("try again")
+          addText("Try again.")
         }
         break;
       //UH OH SHE MAD. UNFINISHED
@@ -681,7 +708,7 @@
           );
           state = "gameover";
         } else {
-          addText("try again");
+          addText("Try again.");
         }
         break;
       //OWO WHAT'RE THESE TRAVELLERS?
@@ -700,7 +727,7 @@
           state = "inn1";
           barman();
         } else {
-          addText("try again!");
+          addText("Try again.!");
         }
         break;
       //DIPLOMACY CHECK. DO YOU TALK GOOD?
@@ -720,12 +747,12 @@
               "I'm sorry, that's a terrible tragedy. I will pray for Mark tonight. As to the men who did this, I would like to pursue them, do you know where they went?"
             );
             addDlg(
-              "Barman: They left town to the North. Everard was out hunting the night after they left and he said that they some of them holed up in a cave a few miles Northwest, and the others continued up the North Road. Stay the night, and I'll have him come over tomorrow morning and you can talk."
+              "Barman: They left town to the North. Everard was out hunting the night after they left and he said that they some of them holed up in a cave a few miles Northwest, and the others continued up the Nothern road. Stay the night, and I'll have him come over tomorrow morning and you can talk."
             );
             addText(
               "Do you stay the night to talk to Everard or begin pursuit right now?"
             );
-            state = "staychoice";
+            state = "staychoicenodinner";
           } else if (pClass !== "diplomat") {
             paladinText(
               "Listen, if you've had trouble with marauders or anything like that, I could deal with them. I'm a paladin of the Sun, from the school of fighting, I can take anyone."
@@ -754,9 +781,42 @@
           state = "inn2";
           addText("Will you stay for dinner?");
         } else {
-          addText("try again!");
+          addText("Try again.!");
         }
         break;
+        case "staychoicenodinner":
+          if (
+            sinputTxt.includes("stay") ||
+            sinputTxt.includes("eve") ||
+            sinputTxt.includes("sleep")
+          ) {
+            paladinText("I will stay the night, and meet your friend in the morning. Thank you again for your hospitality.")
+            addDlg("Barman: My pleasure. My name's Harold,  by the way. Please join us for dinner..")
+            paladinText("Happily.")
+            addText("Dinner is a delicious chicken stew prepared by Harold's wife, Edna.")
+            addText("Press enter for the next day to start.")
+            state = "meetEverard"
+          } else if (
+            sinputTxt.includes("begin") ||
+            sinputTxt.includes("purs") ||
+            sinputTxt.includes("follow") ||
+            sinputTxt.includes("chase") ||
+            sinputTxt.includes("tonight")
+          ) {
+            addText(
+              "You decide that you cannot allow your quarry to continue to get ahead of you."
+            );
+            night = 1;
+            paladinText(
+              "Thank you kindly for your hospitality and your help, but I must get after these fiends as soon as I can."
+            );
+            addDlg(
+              "Barman: Very well. I wish you luck. Will you start with the cave to the Northwest, or pursue the others on the Northern road?");
+                state = "leavingtown";
+          } else {
+            addText("Try again!");
+          }
+          break;
       case "staychoice":
         if (
           sinputTxt.includes("stay") ||
@@ -769,6 +829,7 @@
           addText("Press enter for the next day to start.")
           state = "meetEverard"
         } else if (
+          sinputTxt.includes("begin") ||
           sinputTxt.includes("purs") ||
           sinputTxt.includes("follow") ||
           sinputTxt.includes("chase") ||
@@ -778,31 +839,64 @@
             "You decide that you cannot allow your quarry to continue to get ahead of you."
           );
           night = 1;
+          if (work === 1){
+            paladinText("As soon as I have helped you clean the kitchen I must go. I cannot allow them to draw any further ahead of me.")
+            addText("Edna and Harold glance at eachother over the table and seem to come to a decision".fontcolor("red"))
+            addDlg("Edna: Don't worry about the dishes. Just do some justice for Mark and we'll call it even.")
+            paladinText("Thank you very much Ma'am. Be assured, I will.")
+            addDlg(
+              "Harold: I wish you luck. Will you start with the cave to the Northwest, or pursue the others on the Northern road?");
+                state = "leavingtown";
+          }else{
           paladinText(
             "Thank you kindly for your hospitality and your help, but I must get after these fiends as soon as I can."
           );
           addDlg(
-            "Barman: Very well. I wish you luck. Will you start with the cave to the Northwest, or pursue the others on the North road?"
+            "Barman: Very well. I wish you luck. Will you start with the cave to the Northwest, or pursue the others on the Northern road?");
               state = "leavingtown";
-          );
+            }
         } else {
-          addText("try again!");
+          addText("Try again.!");
         }
+        break;
 
       case "inn2":
-        if (YN === true) {
+        if (YN() === true) {
           addText(
             "Dinner turns out to be a delicious chicken stew, and some good, thick bread."
           );
           paladinText(
             "My compliments, m'lady. This meal rivals those I've eaten at a Baron's table, and I couldn't ask for more in terms of hospitality."
           );
-          addText("The Barman's wife blushes");
-        } else if (YN === false) {
+          addText("The Barman's wife blushes".fontcolor("red"));
+          addDlg("The Wife: Thank you dear. And please, call me Edna. ")
+          paladinText("Very well. Edna, what can you tell me of the travellers who came through the other day?")
+          addDlg(
+            "Edna: Well, about the people who came through the other day. It was a group of five rough men, travelling with a covered wagon. Harold thinks they had someone they were keeping in it. "
+          );
+          addText(
+            "Harold nods, adding: ".fontcolor("red") +
+              "They brought food out to the wagon, and during the night it got up to some awful shaking until one of them went out and stopped it.".fontcolor(
+                "Blue"
+              )
+          );
+          paladinText("A prisoner? Did anyone see him?");
+          addDlg(
+            "Edna: No. Gary's son, Mark tried to stop them on their way out of town, but one of those terrible men just hit him in the head with the pommel of his dagger. Poor Mark, he fell to the ground and he's hardly been up since. And those evil men just rode away north, laughing."
+          );
+          addDlg(
+            "Harold: My friend Everard says he's seen 'em up by the goblin cave, some of 'em. But the others went on North. You can go after them in the morning, but please stay the night. I'll bring Everard over to talk in the morning."
+          );
+          addText(
+            "Do you stay the night to talk to Everard or begin pursuit right now?"
+          );
+          work = 1;
+          state = "staychoice"
+        } else if (YN() === false) {
           addText("You choose not to spend the night. God only knows why given you were promised the info you wanted.");
           state = "closedinn";
         } else {
-          addText("try again");
+          addText("Try again.");
         }
         break;
       //Gonna get dinner?
@@ -870,14 +964,14 @@
           );
           state = "dblchk";
         } else {
-          addText("try again!");
+          addText("Try again.!");
         }
         break;
 
       case "meetEverard":
         addText("You rise with the sun the next morning, and after packing your bags you walk downstairs to discover Harold in conversation with another man. They raise their heads as you enter.")
         addDlg("Harold: Oh, good morning. This is my friend Everard I told you about, the one who saw some of the people you're looking for hanging around by the Goblin Cave.")
-        addText("Everard rises and shakes your hand.".textcolor("red"))
+        addText("Everard rises and shakes your hand.".fontcolor("red"))
         addDlg("Everard: Harold says you're looking for the men who done Mark right? Well I seen some of 'em the other day. I was out huntin' for")
         addText("He stops and eyes you suspiciously".fontcolor("red"))
         addDlg("Wait, you're a paladin? You're not a lawman though right?")
@@ -893,8 +987,9 @@
         }
         addDlg("Harold: Anyway, that's all you know Everard?")
         addDlg("Everard: They also talked some nonsense bout a magic ring. Apparently it makes your footsteps quiet. Seems like a bunch o' crap to me, but one of 'em was pretty upset he'd lost it.")
+        everard = 1;
         paladinText("Thank you, Everard for telling me what you know. I will begin my pursuit right away.")
-        addDlg("Harold: Well, you going to go North after the wagon, or to the Cave?")
+        addDlg("Harold: Well, you going to go up the Northern road after the wagon, or to the Cave?")
         state = "leavingtown"
           //MEETING EVERARD
         break;
@@ -903,7 +998,7 @@
       //YA GOT KICKED OUT or chose not to stay
       case "closedinn":
         addText(
-          "With the inn no longer an option you spend the night beneath the stars, a little ways outside town. You prepare your campsite and after a bland dinner of hard bread and cheese you go to sleep. In the morning you can try again, maybe you'll have better luck with someone else"
+          "With the inn no longer an option you spend the night beneath the stars, a little ways outside town. You prepare your campsite and after a bland dinner of hard bread and cheese you go to sleep. In the morning you can Try again., maybe you'll have better luck with someone else"
         );
         var x = Math.floor(Math.random() * 10 + 1);
         if (x > 8) {
@@ -943,7 +1038,7 @@
           );
           state = "bearfight";
         } else {
-          addText("try again!");
+          addText("Try again.!");
         }
         break;
       case "bearfight":
@@ -1007,7 +1102,7 @@
             "Your horse's whinnies grow louder and more scared but you're too tired to deal with it. The bear doesn't want a fight, and neither do you. You pull a blanket over your head and go back to sleep"
           ).fontcolor("red");
         } else {
-          addText("try again");
+          addText("Try again.");
         }
         break;
       case "dblchk":
@@ -1016,28 +1111,102 @@
           state = "closedinn";
         } else if (YN() === false) {
           addText("Right choice.");
-          addText("Say yes please to go to dinner");
+          addText("Say yes please to go to dinner")
+          state = "dinner?";
         } else {
-          addText("try again!");
+          addText("Try again.!");
         }
         break;
       case "leavingtown":
-      if (/*North Pursuit*/){
-        paladinText("I must follow the up the North road. I feel that their prisoner may be the man I seek.")
-      }else if (/*Goblin Cave*/){
+      if (sinputTxt.includes("northe")||sinputTxt.includes("wagon")||sinputTxt.includes("pursue")){
+        paladinText("I must follow the up the Nothern road. I feel that their prisoner may be the man I seek.")
+        addText("I haven't written this path yet!! Please let me know.1")
+      }else if (sinputTxt.includes("goblin")||sinputTxt.includes("northwest")||sinputTxt.includes("cave")){
         paladinText("I'm going to start with the ones in the cave. They can tell me what's going on, and if their prisoner is the man I seek. At the very least, I can do some justice for Gary's son.")
-        addDlg("Harold: Alright, but be careful. That cave is known for its goblin presence, on top of the bad people we know are in there. It's about 7 miles northwest. If you follow the North road until you reach the lighting struck tree, then turn right you should reach it easily.")
+        addDlg("Harold: Alright, but be careful. That cave is known for its goblin presence, on top of the bad people we know are in there. It's about 7 miles northwest. If you follow the Nothern road until you reach the lightning struck tree, then turn right you should reach it easily.")
         paladinText("Thank you so much for your hospitality and your helpfulness. I will try to repay it at some point.")
         addDlg("Harold: Repay me by dealing with the men that hurt Mark.")
         paladinText("I shall deal justice. Farewell.")
         if (night === 1){
-        addText("You leave that night and hurry on the North road. Sure enough after several miles you come across a huge old tree, hollowed by lighting. Perhaps it would be best to sleep for a few hours here before you continue to the cave?")
+        addText("You leave that night and hurry on the Nothern road. Sure enough after several miles you come across a huge old tree, hollowed by lightning.".fontcolor("red"))
+        addText( "Perhaps it would be best to sleep for a few hours here before you continue to the cave?")
+        state = "sleep?"
+        addText("I haven't written this path yet!! Please let me knoe.")
       }else if (night === 0){
-
+        addText("You retrieve your horse from the stable, and set off North. After several miles of riding you see the tree you were told about, an ancient hulk, hollowed by a lightning strike.".fontcolor("red"))
+        addText("You turn at the tree, and dismount, leading your horse to travel more quietly. After about a mile you tie it up, to move along more easily.".fontcolor("red"))
+        var x = Math.floor(Math.random() * 10 + 1);
+        if (x > 7) {
+          addText("Suddenly a goblin leaps out from behind a tree, chattering at you in some language you don't understand. ")
+          addText("I haven't written this path yet! If you get here, please let me know!!")
+        }else{
+          addText("Several hundred feet further along you see the entrance of the cave before you. Are you going to look around outside or plunge right in?");
+          state = "caveentrance"
+        }
       }
       }else{
-        addText("try again")
+        addText("Try again.")
       }
+        break;
+        //entering the cave
+      case "caveentrance":
+      if (sinputTxt.includes("examine")||sinputTxt.includes("search")||sinputTxt.includes("look")||sinputTxt.includes("around")||sinputTxt.includes("outside")){
+        addText("You search around the outside of the cave but you don't find much. The dirt softened by the rain shows footprints by the cave entrance, so obviously the men you're seeking are still here.")
+        addText("Are you ready to enter the cave?")
+      }else if (sinputTxt.includes("plunge")||sinputTxt.includes("in")||sinputTxt.includes("enter")||sinputTxt.includes("go")||(YN()===true)){
+        addText("You enter the cave cautiously, looking around. There is a little light, enough to see maybe 30 feet back. The cave is fairly large and looks unoccupied, but you know that to be false. There are two natural tunnels at the back of the cave, one going left and one going right. WHhat do you do?")
+        state = "maincave"
+      }else{
+        addText("Try again.")
+      }
+      break;
+      //Look around or follow a tunnel?
+      case "maincave":
+        if (sinputTxt.includes("examine")||sinputTxt.includes("search")||sinputTxt.includes("look")||sinputTxt.includes("around")){
+          addText("You choose to look around the main cave. On closer examination there are signs of human habitation. You find a scuffed out fire in one corner of the cave that had obviously had several meals prepared on it. Touching the coals you find them still warm. Your prey is in.")
+          addText("On the far right wall of the cave you find a rucksack with some food and a knife in it. The kinfe is of surprisingly good quality. Do you take it?")
+          state = "takeknife"
+        }else if (sinputTxt.includes("left")){
+          addText("Moving to the tunnel on your left you peer down it, but find nothing but black before you.".fontcolor("red"))
+          addText("You could try to go down in the dark for stealth, but you'd be a lot less stealthy if you fell on your face.")
+          addText("Will you try to go down the tunnel in the dark or do you light a torch?")
+          state = "torch"
+          tunnel = "left"
+        }else if (sinputTxt.includes("right")){
+          addText("You move to the righthand tunnel and peer into its depths, but find nothing but black before you.".fontcolor("red")+" The light from the entrance doesn't reach this far.")
+          addText("You could try to walk in the dark for stealth, but you'd be a lot less stealthy if you fell on your face.")
+          addText("Will you try to go down the tunnel in the dark or do you light a torch?")
+          state = "torch"
+          tunnel = "right"
+        }else{
+          addText("Try again.")
+        }
+        break;
+        case "takeknife":
+        break;
+        case "torch":
+          if (sinputTxt.includes("light")||sinputTxt.includes("torch")){
+            addText("That was a bright choice.")
+            addText("You light your torch, and suddenly the tunnel is brought into sharp relief.")
+            if (inventory.indexOf("ring") !== -1 && everard == 1){
+              addText("As you're thinking about stealth and the tunnel before you, you remember what Everard said about the ring. Perhaps it's the same ring you found.")
+              addText("Do you put it on?")
+              state = "ringchoice"
+            }else{
+              addText("UwU end of the line. Gotta write more.")
+            }
+          }
+        break;
+
+        case "ringchoice":
+          if (YN()===true){
+            addText("You slip the ring onto your finger".fontcolor("red"))
+            addText("Nothing feels different, but when you start to walk down the tunnel you realise that Everard was absolutely right. You footsteps are now silent, even in your heavy boots.")
+            cavestealth = 1;
+          }else if (YN()===false) {
+            addText("Probably a good choice. Best not to mess with magic you don't know.")
+            addText("You continue down the tunnel, walking as quietly as you can.")
+          }
         break;
     }
   });
