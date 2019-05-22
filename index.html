@@ -8,6 +8,7 @@
     div{
       width: 500px;
       word-break: normal;
+      margin-top: 5px
   }
   </style>
 </head>
@@ -73,9 +74,14 @@
   function addText(s) {
     var div = $('<div id="text2" style = >' + s + "</div>");
     $("#text").append(div);
+
   }
   function addDlg(s) {
     var div = $('<div id="text2">' + s.fontcolor("blue") + "</div>");
+    $("#text").append(div);
+  }
+  function notDone(){
+    var div = $('<div id="text2" style = >' + "I haven't gotten here yet!" + "</div>");
     $("#text").append(div);
   }
   function paladinText(s) {
@@ -118,22 +124,25 @@
         if (pClass !== null) {
           state = "town1";
           addText(
-            "Well, " +
-              pClass +
-              ", let me fill you in on what's happening. You are currently searching for a missing member of your order named Haken. The path has lead you to a town called Chaepstow. You have just ridden into town as the sun is setting and you see an inn and a man leaning on a wall by the side of the road. Which do you approach?"
-          );
+            "Well, ".fontcolor("red") +
+              pClass.fontcolor("gold") +
+              ", let me fill you in on what's happening. You are currently searching for a missing member of your order named Haken. The path has lead you to a town called Chaepstow. You have just ridden into town as the sun is setting and you see an inn and a man leaning on a wall by the side of the road.".fontcolor("red"));
+
+              addText(" Which do you approach?");
+        }else {
+          return;
         }
         break;
       //Arrival in town
       case "town1":
         if (sinputTxt.includes("man") || sinputTxt.includes("wall")) {
-          addText("You approach the man on the wall".fontcolor("red"));
+          addText("You approach the man on the wall.".fontcolor("red"));
           state = "wallman";
           addText(
             "The man looks up as you approach, but says nothing.".fontcolor(
               "red"
-            ) +
-              " What do you want to ask him about? 1. The town	 2. Haken  3. Himself"
+            ));
+              addText(" What do you want to ask him about? 1. The town,	 2. Haken, or 3. Himself"
           );
         } else if (sinputTxt.includes("inn")) {
           addText("To the inn! Press enter to continue.");
@@ -396,6 +405,7 @@
         } else {
           addText("Try again!");
         }
+        break;
       //START OF INN BRANCHES
       //In the inn
       case "inn1":
@@ -985,7 +995,7 @@
         break;
 
       case "meetEverard":
-        addText("You rise with the sun the next morning, and after packing your bags you walk downstairs to discover Harold in conversation with another man. They raise their heads as you enter.")
+        addText("You rise with the sun the next morning, and after packing your bags you walk downstairs to discover Harold in conversation with another man. They lift their heads as you enter.".fontcolor("red"))
         addDlg("Harold: Oh, good morning. This is my friend Everard I told you about, the one who saw some of the people you're looking for hanging around by the Goblin Cave.")
         addText("Everard rises and shakes your hand.".fontcolor("red"))
         addDlg("Everard: Harold says you're looking for the men who done Mark right? Well I seen some of 'em the other day. I was out huntin' for")
@@ -1136,7 +1146,7 @@
       case "leavingtown":
       if (sinputTxt.includes("northe")||sinputTxt.includes("wagon")||sinputTxt.includes("pursue")){
         paladinText("I must follow the up the Nothern road. I feel that their prisoner may be the man I seek.")
-        addText("I haven't written this path yet!! Please let me know.1")
+        notDone();
       }else if (sinputTxt.includes("goblin")||sinputTxt.includes("northwest")||sinputTxt.includes("cave")){
         paladinText("I'm going to start with the ones in the cave. They can tell me what's going on, and if their prisoner is the man I seek. At the very least, I can do some justice for Gary's son.")
         addDlg("Harold: Alright, but be careful. That cave is known for its goblin presence, on top of the bad people we know are in there. It's about 7 miles northwest. If you follow the Nothern road until you reach the lightning struck tree, then turn right you should reach it easily.")
@@ -1147,7 +1157,7 @@
         addText("You leave that night and hurry on the Nothern road. Sure enough after several miles you come across a huge old tree, hollowed by lightning.".fontcolor("red"))
         addText( "Perhaps it would be best to sleep for a few hours here before you continue to the cave?")
         state = "sleep?"
-        addText("I haven't written this path yet!! Please let me knoe.")
+        addText("I haven't written this path yet!! Please let me know.")
       }else if (night === 0){
         addText("You retrieve your horse from the stable, and set off North. After several miles of riding you see the tree you were told about, an ancient hulk, hollowed by a lightning strike.".fontcolor("red"))
         addText("You turn at the tree, and dismount, leading your horse to travel more quietly. After about a mile you tie it up, to move along more easily.".fontcolor("red"))
@@ -1170,7 +1180,8 @@
         addText("You search around the outside of the cave but you don't find much. The dirt softened by the rain shows footprints by the cave entrance, so obviously the men you're seeking are still here.")
         addText("Are you ready to enter the cave?")
       }else if (sinputTxt.includes("plunge")||sinputTxt.includes("in")||sinputTxt.includes("enter")||sinputTxt.includes("go")||(YN()===true)){
-        addText("You enter the cave cautiously, looking around. There is a little light, enough to see maybe 30 feet back. The cave is fairly large and looks unoccupied, but you know that to be false. There are two natural tunnels at the back of the cave, one going left and one going right. What do you do?")
+        addText("You enter the cave cautiously, looking around. There is a little light, enough to see maybe 30 feet back. The cave is fairly large and looks unoccupied, but you know that to be false. There are two natural tunnels at the back of the cave, one going left and one going right.".fontcolor("red"));
+        addText(" What do you do?")
         state = "maincave"
       }else{
         addText("Try again!")
@@ -1178,9 +1189,10 @@
       break;
       //Look around or follow a tunnel?
       case "maincave":
-        if (sinputTxt.includes("examine")||sinputTxt.includes("search")||sinputTxt.includes("look")||sinputTxt.includes("around")){
-          addText("You choose to look around the main cave. On closer examination there are signs of human habitation. You find a scuffed out fire in one corner of the cave that had obviously had several meals prepared on it. Touching the coals you find them still warm. Your prey is in.")
-          addText("On the far right wall of the cave you find a rucksack with some food and a knife in it. The kinfe is of surprisingly good quality. Do you take it?")
+        if (sinputTxt.includes("examine")||sinputTxt.includes("search")||sinputTxt.includes("look")||sinputTxt.includes("around")&&(sinputTxt.includes("left")===false)&&(sinputTxt.includes("right")===false)){
+          addText("You choose to look around the main cave. On closer examination there are signs of human habitation. You find a scuffed out fire in one corner of the cave that had obviously had several meals prepared on it. Touching the coals you find them still warm. Your prey is in.".fontcolor("red"))
+          addText("On the far right wall of the cave you find a rucksack with some food and a knife in it. The kinfe is of surprisingly good quality.".fontcolor("red"))
+          addText("Do you take it?")
           state = "takeknife"
         }else if (sinputTxt.includes("left")){
           addText("Moving to the tunnel on your left you peer down it, but find nothing but black before you.".fontcolor("red"))
@@ -1199,6 +1211,7 @@
         }
         break;
         case "takeknife":
+        notDone();
         break;
         case "torch":
           if (sinputTxt.includes("light")||sinputTxt.includes("torch")){
@@ -1266,7 +1279,7 @@
           addDlg("Man 1: Yeah whatever. we have him now. If he can't get us the money we'll take it out of his hide. Not to mention thaat fancy armor and sword of his have gotta be worth a fair bit.")
           addText("You're fairly sure they're talking about Haken.");
           addText("Do you attack them, or offer them a chance to surrender and tell you what they know?");
-          state = "enemysurprise"
+          state = "enemySurprise"
         }else if (cavestealth !== 1){
               var x = Math.floor(Math.random() * 10 + 1);
               if (x <= 7){
@@ -1279,7 +1292,7 @@
               addDlg("Man 1: Yeah whatever. we have him now. If he can't get us the money we'll take it out of his hide. Not to mention thaat fancy armor and sword of his have gotta be worth a fair bit.")
               addText("You're fairly sure they're talking about Haken.");
               addText("Do you attack them, or offer them a chance to surrender and tell you what they know?");
-              state = "enemysurprise"
+              state = "enemySurprise"
             }
           }
     }else if (sinputTxt.includes("challenge")||sinputTxt.includes("call")||sinputTxt.includes("yell")){
@@ -1290,15 +1303,22 @@
         addDlg("Man 1: You're right.")
         addDlg("Man 1: Hey Paladin, why're you here? We don't have any business with you.")
         addText("How do you respond? Do you ask them about Haken, do you challenge them about Mark, or do you ask them what they're doing here?")
-        state = "TalkingEnemy"
+        state = "talkingEnemy"
       }else{
         addText("Try again!")
       }
       break;
 
-    case "TalkingEnemy":
+  case "talkingEnemy":
+    notDone();
       break;
-    case "enemysurprise":
+  case "enemySurprise":
+    if (sinputTxt.includes("surrender")||sinputTxt.includes("command")||sinputTxt.includes("offer")){
+      addText("Boo! It me. Surrender or die.")
+    }else if(sinputTxt.includes("assault")||sinputTxt.includes("attack")||sinputTxt.includes("kill")){
+      addText("Which one?")
+    }
+
       break;
     }
   });
