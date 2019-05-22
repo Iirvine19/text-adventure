@@ -1,4 +1,17 @@
-<h2>Hunt for Haken</h2>
+<head>
+<link href="https://fonts.googleapis.com/css?family=Macondo+Swash+Caps&display=swap" rel="stylesheet">
+  <style type="text/css" media="screen">
+    body {
+  background-color: black;
+  color: white;
+}
+    div{
+      width: 500px;
+      word-break: normal;
+  }
+  </style>
+</head>
+<h2 style="text-align: left; font-size: 60px; font-family: 'Macondo Swash Caps', cursive; color: purple;">Hunt for Haken</h2>
 <br /><br />
 <div id="text"></div>
 <input id="input" />
@@ -25,9 +38,11 @@
     "affirmative",
     "agreed",
     "roger",
-    "ok", "cool", "okie"
+    "ok",
+     "cool",
+    "okie"
   ];
-  var torch === 0;
+  var torch = 0;
   var cavestealth = 0;
   var work = 0;
   var everard = 0;
@@ -56,7 +71,7 @@
     "Paladin of the Sun".fontcolor("gold") +
     ", a noble order who fight for good across the known world. Do you come from the school of Fighting or the school of Diplomacy?";
   function addText(s) {
-    var div = $('<div id="text2">' + s + "</div>");
+    var div = $('<div id="text2" style = >' + s + "</div>");
     $("#text").append(div);
   }
   function addDlg(s) {
@@ -251,10 +266,8 @@
           ) {
             standCounter++;
             addText(
-              "You keep standing in the road. Nothing much is happening. The old man won't acknowledge you".fontcolor(
-                "red"
-              ) + " Do you want to go to the inn now?"
-            );
+              "You keep standing in the road. Nothing much is happening. The old man won't acknowledge you.".fontcolor(  "red"  ) );
+              addText(" Do you want to go to the inn now?");
             state = "standing";
           } else if (
             sinputTxt.includes("attack") ||
@@ -302,10 +315,8 @@
           ) {
             standCounter++;
             addText(
-              "You keep standing in the road. Nothing much is happening. The old man won't acknowledge you".fontcolor(
-                "red"
-              ) + " Do you want to go to the inn now?"
-            );
+              "You keep standing in the road. Nothing much is happening. The old man won't acknowledge you.".fontcolor(  "red"  ) );
+              addText(" Do you want to go to the inn now?");
             state = "innchoice";
           } else if (
             sinputTxt.includes("attack") ||
@@ -440,6 +451,8 @@
               addDlg(
                 "Barman: Ah, that was probably Gary. Well, I won't say he usually goes out of his way for strangers, but with recent events especially I can see that he would've been unkind to you. Sorry bout him, everyone's a bit on edge."
               );
+              addText("Recent events, huh?")
+              addText("What else do you want to ask him about?")
               revents = 1;
             } else if (
               sinputTxt.includes("2") ||
@@ -454,6 +467,7 @@
                   "red"
                 )
               );
+              addText("What else do you want to ask him about?")
             } else if (sinputTxt.includes("3") || sinputTxt.includes("town")) {
               paladinText(
                 "Greetings, barman, what can you tell me about this town?"
@@ -465,6 +479,7 @@
               addText(
                 "The barman trails off, chuckling nervously.".fontcolor("red")
               );
+              addText("What else do you want to ask him about?")
             } else if (
               sinputTxt.includes("4") ||
               sinputTxt.includes("him") ||
@@ -476,6 +491,7 @@
               addDlg(
                 "Barman: Oh just call me barman, my name doesn't matter. As you can probably tell I own this inn. I run the bar, and my wife cooks. We both deal with roomers."
               );
+              addText("What else do you want to ask him about?")
             } else if (
               revents === 1 &&
               (sinputTxt.includes("recent") || sinputTxt.includes("event"))
@@ -678,12 +694,12 @@
             "Please excuse me ma'am, I'm just trying to complete my mission. I'm terribly sorry if I frightened you."
           );
           addDlg(
-            "The Wife: don't be absurd, it would take a lot more than that to scare me."
+            "The Wife: Don't be absurd, it would take a lot more than that to scare me."
           );
-          addText("The Wife turns to her husband").fontcolor("red");
+          addText("The Wife turns to her husband".fontcolor("red"));
           addDlg("The Wife: Is he staying for dinner?");
           addDlg("The Barman: I don't know.");
-          addText("He turns to you").fontcolor("red");
+          addText("He turns to you".fontcolor("red"));
           addDlg("The Barman: Are you?");
           state = "dinner?";
         } else if (sinputTxt.includes("defend")) {
@@ -1209,17 +1225,13 @@
             addText("Probably a good choice. Best not to mess with magic you don't know.")
             addText("You continue down the tunnel, walking as quietly as you can.".fontcolor("red"))
           }else {addText("Try again!")}
-          //Left Tunnel Stealthy
-          if (tunnel === "left" && cavestealth === 1){
+          //Left Tunnel
+          if (tunnel === "left"){
           addText("You stalk silently down the tunnel for several minutes, following a winding downward curve.".fontcolor("red"));
           addText("As you walk along the paty you suddenly realise there's light coming into the other end of the tunnel.".fontcolor("red"))
           addText(" Do you extinguish your torch?")
           laststate = state;
           state = "torchout"
-          }
-          //Left tunnel non-Stealthy
-          else if(tunnel === "left" && cavestealth === 0){
-
           }
           //Right tunnel Stealthy
           else if(tunnel === "right" && cavestealth === 1){
@@ -1234,8 +1246,9 @@
         if (YN()===true){
           torch = 0;
           if (laststate = "ringchoice"){
-            state = "UwU What State?"
+            state = "firstcontact"
               addText("You extinguish your torch before proceeding carefully around the corner.")
+                addText("The tunnel opens up into a large room, lit by a flickering fire in the back corner. You feel a light breeze blowing over you. At the back wall of the room you see two men with their backs to you talking by a fire. Do you challenge them, or sneak closer to hear what they're saying?")
           }
 
 
@@ -1243,6 +1256,50 @@
           torch = 1;
         }
         break;
+      case "firstcontact":
+      if (sinputTxt.includes("sneak")||sinputTxt.includes("stealth")){
+        if (cavestealth === 1){
+          addText("You succesfully sneak up behind them, your ring of silence making you almost entirely undetectable.".fontcolor("red"));
+          addText("From your new vantage behind them you can hear them talking.")
+          addDlg("Man 1: I still can't believe how easy he was to get in the end. After all the circles he ran around us, we really just picked him up wiith no probles.")
+          addDlg("Man 2: No problems? He broke my wrist! He split Hector's knee open! I'd say there were some problems.")
+          addDlg("Man 1: Yeah whatever. we have him now. If he can't get us the money we'll take it out of his hide. Not to mention thaat fancy armor and sword of his have gotta be worth a fair bit.")
+          addText("You're fairly sure they're talking about Haken.");
+          addText("Do you attack them, or offer them a chance to surrender and tell you what they know?");
+          state = "enemysurprise"
+        }else if (cavestealth !== 1){
+              var x = Math.floor(Math.random() * 10 + 1);
+              if (x <= 7){
+              addText("Owo, not sneaky enough");
+            }else{
+              addText("You succesfully sneak up on the fire despite your noisy armor".fontcolor("red"));
+              addText("From your new vantage behind them you can hear them talking.")
+              addDlg("Man 1: I still can't believe how easy he was to get in the end. After all the circles he ran around us, we really just picked him up wiith no probles.")
+              addDlg("Man 2: No problems? He broke my wrist! He split Hector's knee open! I'd say there were some problems.")
+              addDlg("Man 1: Yeah whatever. we have him now. If he can't get us the money we'll take it out of his hide. Not to mention thaat fancy armor and sword of his have gotta be worth a fair bit.")
+              addText("You're fairly sure they're talking about Haken.");
+              addText("Do you attack them, or offer them a chance to surrender and tell you what they know?");
+              state = "enemysurprise"
+            }
+          }
+    }else if (sinputTxt.includes("challenge")||sinputTxt.includes("call")||sinputTxt.includes("yell")){
+        paladinText("Hail, miscreants. I have some questions for you.")
+        addText("The men jump at your call, and are swiftly on their feet, swords in hand.".fontcolor("red"));
+        addDlg("Man 1: What're you doing here? You shouldn't be here.")
+        addDlg("Man 2: Look, he's got the sun on his chest.")
+        addDlg("Man 1: You're right.")
+        addDlg("Man 1: Hey Paladin, why're you here? We don't have any business with you.")
+        addText("How do you respond? Do you ask them about Haken, do you challenge them about Mark, or do you ask them what they're doing here?")
+        state = "TalkingEnemy"
+      }else{
+        addText("Try again!")
+      }
+      break;
+
+    case "TalkingEnemy":
+      break;
+    case "enemysurprise":
+      break;
     }
   });
 </script>
