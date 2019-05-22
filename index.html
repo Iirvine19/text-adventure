@@ -1,4 +1,5 @@
 <head>
+  <link href="https://fonts.googleapis.com/css?family=MedievalSharp&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Macondo+Swash+Caps&display=swap" rel="stylesheet">
   <style type="text/css" media="screen">
     body {
@@ -6,6 +7,7 @@
   color: white;
 }
     div{
+      font-family: 'MedievalSharp', cursive;
       width: 500px;
       word-break: normal;
       margin-top: 5px
@@ -1314,12 +1316,26 @@
       break;
   case "enemySurprise":
     if (sinputTxt.includes("surrender")||sinputTxt.includes("command")||sinputTxt.includes("offer")){
-      addText("Boo! It me. Surrender or die.")
+      addText("You draw your sword, and raise yourself to your full height. From immediately behind them you bellow:")
+      if (pClass === "diplomat"){
+        paladinText("STAND UP HANDS ON YOUR HEAD. LISTEN TO ME AND YOU WON'T BE HURT.")
+          var x = Math.floor(Math.random() * 10 + 1);
+      }else{
+        paladinText("ON THE GROUND, HANDS ON YOUR HEAD. MAKE A WRONG MOVE AND I'LL GUT YOU LIKE A FISH.")
+          var x = Math.floor(Math.random() * 10 + 1);
+      }
+      addTet
     }else if(sinputTxt.includes("assault")||sinputTxt.includes("attack")||sinputTxt.includes("kill")){
-      addText("Which one?")
+      addText("Which one? The guy with the broken wrist or the other one.")
+      state = "attackChoice1"
+    }else{
+      addText("Try again!")
     }
 
       break;
+  case "attackChoice1":
+  //Needs to be different depending on class. Needs to be different depending which one you attack. Yay, more states.
+  break;
     }
   });
 </script>
